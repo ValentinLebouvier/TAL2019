@@ -1,0 +1,23 @@
+TAL Behaviour Tree
+* Réunion départ
+obj1:comprendre modele
+obj2:pour implementation en l2
+obj3:mission planning ??
+
+créer et se baser sur exemples/ pbms
+
+plus programmation objets que fonctionnelle
+installation anaconda
+
+CR pour Dezan
+/!\ qques slides / semaines
+
+rapport: ~tuto comment introduire notion dans un projet l2?
+
+
+
+* 06/05
+installation Anaconda
+creation Git TAL2019
+début étude préliminaire sur les behaviour trees
+
