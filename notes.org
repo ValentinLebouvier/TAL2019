@@ -21,3 +21,8 @@ installation Anaconda
 creation Git TAL2019
 début étude préliminaire sur les behaviour trees
 
+* 07/05
+Recherche de sources
+Prise en main du modèle des BT
+
+
