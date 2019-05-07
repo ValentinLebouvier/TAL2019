@@ -1,0 +1,14 @@
+M1TAL2019
+* Sources WEB
+** py_trees
+https://py-trees.readthedocs.io/en/devel/index.html
+** AI GameDev - Behaviour Trees
+http://aigamedev.com/insider/presentation/behavior-trees/
+Impossible de Sign-Up
+** Behavior Trees: Simple yet Powerful AI for your Robot
+http://www.pirobot.org/blog/0030/
+** Youtube - Second Generation of Behaviour Trees
+https://www.youtube.com/watch?v=n4aREFb3SsU
+** Behaviour Trees in Robotics and AI
+https://arxiv.org/pdf/1709.00084.pdf
+* Sources Bibliographiques
