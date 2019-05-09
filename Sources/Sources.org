@@ -11,4 +11,6 @@ http://www.pirobot.org/blog/0030/
 https://www.youtube.com/watch?v=n4aREFb3SsU
 ** Behaviour Trees in Robotics and AI
 https://arxiv.org/pdf/1709.00084.pdf
+** Toward a Unified Behaviour Trees Framework For Robot Control 
+https://www.thesisscientist.com/docs/Articles/879b3b8c-0f98-46a4-9c21-7898639a67ac
 * Sources Bibliographiques

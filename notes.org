@@ -2,7 +2,7 @@ TAL Behaviour Tree
 * Réunion départ
 obj1:comprendre modele
 obj2:pour implementation en l2
-obj3:mission planning ??
+obj3:?? mission planning ??
 
 créer et se baser sur exemples/ pbms
 
@@ -13,9 +13,6 @@ CR pour Dezan
 /!\ qques slides / semaines
 
 rapport: ~tuto comment introduire notion dans un projet l2?
-
-
-
 * 06/05
 installation Anaconda
 creation Git TAL2019
@@ -25,4 +22,15 @@ début étude préliminaire sur les behaviour trees
 Recherche de sources
 Prise en main du modèle des BT
 
-
+* 09/05
+/??\ Se renseigner sur les blackboards
+/?\ Demander outline du cours de POO à Mme Dezan
+L2: Pb PAC-MAN
+Programmer avec un BT une IA pour PAC-MAN
+De base, programmer Pac-Man pour manger et éviter les fantômes
+** Ex 1:
+Étudiants ont le behaviour tree & ils doivent le programmer (faire de l'héritage avec pyTree)
+** Ex 2:
+Étudiants ont les blocs & doivent reconstruire le behaviour tree & ensuite l'implémenter (structure présente, texte a trous (Héritage/...)
+** Ex 3:
+Pour les plus rapides, blocs supplémentaires ou contraintes supplémentaires (Pac-Man aggressif, ...)
