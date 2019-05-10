@@ -34,3 +34,7 @@ De base, programmer Pac-Man pour manger et éviter les fantômes
 Étudiants ont les blocs & doivent reconstruire le behaviour tree & ensuite l'implémenter (structure présente, texte a trous (Héritage/...)
 ** Ex 3:
 Pour les plus rapides, blocs supplémentaires ou contraintes supplémentaires (Pac-Man aggressif, ...)
+* 10/05
+PLanification d'une mission, que faire, 
+aller a un objectif + actions a réaliser 
+Exemples /!\ Mardi 11h

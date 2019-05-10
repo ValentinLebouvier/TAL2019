@@ -13,4 +13,6 @@ https://www.youtube.com/watch?v=n4aREFb3SsU
 https://arxiv.org/pdf/1709.00084.pdf
 ** Toward a Unified Behaviour Trees Framework For Robot Control 
 https://www.thesisscientist.com/docs/Articles/879b3b8c-0f98-46a4-9c21-7898639a67ac
+** Behaviour Trees for Evolutionary Robotics: Reducing the Reality Gap
+https://repository.tudelft.nl/islandora/object/uuid:dde8d42e-590a-465d-abaf-760ec304760f?collection=education
 * Sources Bibliographiques
