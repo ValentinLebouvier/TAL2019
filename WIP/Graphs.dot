@@ -1,0 +1,12 @@
+digraph struts {
+	Ø [shape=box];
+	Seq1 [shape=box, label="->"];
+	Goto_Cube [shape=box, label="Goto Cube"];
+	Grab_Cube [shape=box, label="Grab Cube"];
+	Goto_Goal [shape=box, label="Goto Goal"];
+	Place_Goal [shape=box, label="Place on Goal"];
+	
+	Ø -> Seq1;
+	Seq1 -> { Goto_Cube; Grab_Cube; Goto_Goal; Place_Goal};
+}
+	

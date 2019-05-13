@@ -2,6 +2,7 @@ M1TAL2019
 * Sources WEB
 ** py_trees
 https://py-trees.readthedocs.io/en/devel/index.html
+https://github.com/splintered-reality/py_trees
 ** AI GameDev - Behaviour Trees
 http://aigamedev.com/insider/presentation/behavior-trees/
 Impossible de Sign-Up
