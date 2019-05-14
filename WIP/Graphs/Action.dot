@@ -1,0 +1,3 @@
+digraph Condition {
+	N[shape=box,label="Action"];
+}

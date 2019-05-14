@@ -1,0 +1,3 @@
+digraph Decorator {
+	N[shape=diamond,label="δ",xlabel="Rule"];
+}

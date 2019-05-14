@@ -1,9 +1,0 @@
-digraph Sequence {
-	Node1[shape=none,height=0,width=0,margin=0,style=invis];
-	Node2[shape=none,height=0,width=0,margin=0,style=invis];
-	Node3[shape=box,label="→"];
-
-	Node1 -> Node3;
-	Node3 -> Node2;
-	
-}

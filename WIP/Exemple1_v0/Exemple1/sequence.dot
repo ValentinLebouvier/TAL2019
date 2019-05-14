@@ -1,0 +1,14 @@
+digraph pastafarianism {
+graph [fontname="times-roman"];
+node [fontname="times-roman"];
+edge [fontname="times-roman"];
+Sequence [fillcolor=orange, fontcolor=black, fontsize=9, label=Sequence, shape=box, style=filled];
+Goto_Block [fillcolor=gray, fontcolor=black, fontsize=9, label=Goto_Block, shape=ellipse, style=filled];
+Sequence -> Goto_Block;
+Grab_Block [fillcolor=gray, fontcolor=black, fontsize=9, label=Grab_Block, shape=ellipse, style=filled];
+Sequence -> Grab_Block;
+Goto_Goal [fillcolor=gray, fontcolor=black, fontsize=9, label=Goto_Goal, shape=ellipse, style=filled];
+Sequence -> Goto_Goal;
+Place_Goal [fillcolor=gray, fontcolor=black, fontsize=9, label=Place_Goal, shape=ellipse, style=filled];
+Sequence -> Place_Goal;
+}
