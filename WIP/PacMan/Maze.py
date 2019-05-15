@@ -6,8 +6,6 @@ Created on Tue May 14 15:57:06 2019
 @author: valentinlebouvier
 """
 
-import numpy as np
-
 class Maze(object):
     
     HEIGHT = 31
@@ -19,48 +17,72 @@ class Maze(object):
     
     def init_maze(random=True):
         maze = [[1 for y in range(Maze.WIDTH)] for x in range(Maze.HEIGHT)]
-        if (random):
+        if random:
             pass
         else:
-            for x in range(Maze.HEIGHT):
-                for y in range(Maze.WIDTH):
-                    if (x==0|y==0|x==Maze.HEIGHT|y==Maze.WIDTH):
-                        maze[x][y]=-1
+            maze =[ 14*[-1] + [-1]*14,
+                    [-1]+12*[1]+[-1] + [-1]+[1]*12+[-1],
+                    [-1]+[1]+4*[-1]+[1]+5*[-1]+[1]+[-1] + [-1]+[1]+[-1]*5+[1]+[-1]*4+[1]+[-1],
+                    [-1]+[1]+4*[-1]+[1]+5*[-1]+[1]+[-1] + [-1]+[1]+[-1]*5+[1]+[-1]*4+[1]+[-1],
+                    [-1]+[1]+4*[-1]+[1]+5*[-1]+[1]+[-1] + [-1]+[1]+[-1]*5+[1]+[-1]*4+[1]+[-1],
+                    [-1]+13*[1] + [1]*13+[-1],
+                    [-1]+[1]+4*[-1]+[1]+2*[-1]+[1]+4*[-1] + [-1]*4+[1]+[-1]*2+[1]+[-1]*4+[1]+[-1],
+                    [-1]+[1]+4*[-1]+[1]+2*[-1]+[1]+4*[-1] + [-1]*4+[1]+[-1]*2+[1]+[-1]*4+[1]+[-1],
+                    [-1]+6*[1]+2*[-1]+4*[1]+[-1] + [-1]+[1]*4+[-1]*2+[1]*6+[-1],
+                    6*[-1]+[1]+5*[-1]+[1]+[-1] + [-1]+[1]+[-1]*5+[1]+[-1]*6,
+                    6*[-1]+[1]+5*[-1]+[1]+[-1] + [-1]+[1]+[-1]*5+[1]+[-1]*6,
+                    6*[-1]+[1]+2*[-1]+5*[1] + [1]*5+[-1]*2+[1]+[-1]*6,
+                    6*[-1]+[1]+2*[-1]+[1]+4*[-1] + [-1]*4+[1]+[-1]*2+[1]+[-1]*6,
+                    6*[-1]+[1]+2*[-1]+[1]+4*[-1] + [-1]*4+[1]+[-1]*2+[1]+[-1]*6,
+                    10*[1]+4*[-1] + [-1]*4+[1]*10,
+                    6*[-1]+[1]+2*[-1]+[1]+4*[-1] + [-1]*4+[1]+[-1]*2+[1]+[-1]*6,
+                    6*[-1]+[1]+2*[-1]+[1]+4*[-1] + [-1]*4+[1]+[-1]*2+[1]+[-1]*6,
+                    6*[-1]+[1]+2*[-1]+5*[1] + [1]*5+[-1]*2+[1]+[-1]*6,
+                    6*[-1]+[1]+2*[-1]+[1]+4*[-1] + [-1]*4+[1]+[-1]*2+[1]+[-1]*6,
+                    6*[-1]+[1]+2*[-1]+[1]+4*[-1] + [-1]*4+[1]+[-1]*2+[1]+[-1]*6,
+                    [-1]+12*[1]+[-1] + [-1]+[1]*12+[-1],
+                    [-1]+[1]+4*[-1]+[1]+5*[-1]+[1]+[-1] + [-1]+[1]+[-1]*5+[1]+[-1]*4+[1]+[-1],
+                    [-1]+[1]+4*[-1]+[1]+5*[-1]+[1]+[-1] + [-1]+[1]+[-1]*5+[1]+[-1]*4+[1]+[-1],
+                    [-1]+3*[1]+2*[-1]+8*[1] + [1]*8+[-1]*2+[1]*3+[-1],
+                    3*[-1]+[1]+2*[-1]+[1]+2*[-1]+[1]+4*[-1] + [-1]*4+[1]+[-1]*2+[1]+[-1]*2+[1]+[-1]*3,
+                    3*[-1]+[1]+2*[-1]+[1]+2*[-1]+[1]+4*[-1] + [-1]*4+[1]+[-1]*2+[1]+[-1]*2+[1]+[-1]*3,
+                    [-1]+6*[1]+2*[-1]+4*[1]+[-1] + [-1]+[1]*4+[-1]*2+[1]*6+[-1],
+                    [-1]+[1]+10*[-1]+[1]+[-1] + [-1]+[1]+[-1]*10+[1]+[-1],
+                    [-1]+[1]+10*[-1]+[1]+[-1] + [-1]+[1]+[-1]*10+[1]+[-1],
+                    [-1]+13*[1] + [1]*13+[-1],
+                    14*[-1] + [-1]*14
+                ]
         return maze
         
     def __init__(self,random_maze=False):
         self.maze = Maze.init_maze(random_maze)
         
-    def canMoveWest(self,coord):
-        return self.maze[coord[0]][(coord[1]-1)%Maze.WIDTH] != -1
+    def isWall(self,x,y):
+        return self.maze[x%Maze.HEIGHT][y%Maze.WIDTH]==Maze.Wall
     
-    def canMoveEast(self,coord):
-        return self.maze[coord[0]][(coord[1]+1)%Maze.WIDTH] != -1    
+    def hasPill(self,x,y):
+        return self.maze[x][y]==Maze.Pill
     
-    def canMoveSouth(self,coord):
-        return self.maze[(coord[0]+1)%Maze.HEIGHT][coord[1]] != -1
+    def takePill(self,x,y):
+        if self.hasPill(x,y):
+            self.maze[x][y]=Maze.Empty
+            return True
+        return False
     
-    def canMoveNorth(self,coord):
-        return self.maze[(coord[0]-1)%Maze.HEIGHT][coord[1]] != -1
-        
-    def moveWest(self,coord):
-        if self.canMoveWest():
-            coord[1] = (coord[1]-1) % Maze.WIDTH
-        return self.maze[coord[0]][coord[1]]==1;
-        
-    def moveEast(self,coord):
-        if self.canMoveEast():
-            coord[1] = (coord[1]+1) % Maze.WIDTH
-        return self.maze[coord[0]][coord[1]]==1;
-        
-    def moveSouth(self,coord):
-        if self.canMoveSouth():
-            coord[0] = (coord[0]+1) % Maze.HEIGHT
-        return self.maze[coord[0]][coord[1]]==1;
-        
-    def moveNorth(self,coord):
-        if self.canMoveNorth():
-            coord[0] = (coord[0]-1) % Maze.HEIGHT
-        return self.maze[coord[0]][coord[1]]==1;
+    def hasNoPill(self):
+        for x in range(Maze.HEIGHT):
+            for y in range(Maze.WIDTH):
+                if self.hasPill(x,y):
+                    return False
+        return True
     
+    def display(self):
+        tileset = [".","o","▓"]
+        for x in range(Maze.HEIGHT):
+            for y in range(Maze.WIDTH):
+                print(tileset[self.maze[x][y]], sep='', end=' ')
+            print()
+                       
+                       
+            
     
