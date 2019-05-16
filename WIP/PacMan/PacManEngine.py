@@ -24,6 +24,6 @@ class PacManEngine(object):
     
     def hasWon(self):
         return not(self.hasLost()) and self.noMorePills()
-    
+
     
     

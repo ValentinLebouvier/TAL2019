@@ -56,7 +56,6 @@ class PacMan(MovableCharacter):
     
     def moveEast(self):
         if self.canGoEast():
-            print("East",self.x,self.y)
             self.y=(self.y+1)%self.maze.WIDTH
             if self.maze.takePill(self.x,self.y):
                 self.eatenPills += 1
@@ -65,7 +64,6 @@ class PacMan(MovableCharacter):
         
     def moveWest(self):
         if self.canGoWest():
-            print("West",self.x,self.y)
             self.y=(self.y-1)%self.maze.WIDTH
             if self.maze.takePill(self.x,self.y):
                 self.eatenPills += 1
@@ -74,7 +72,6 @@ class PacMan(MovableCharacter):
 
     def moveSouth(self):
         if self.canGoSouth():
-            print("South",self.x,self.y)
             self.x=(self.x+1)%self.maze.HEIGHT
             if self.maze.takePill(self.x,self.y):
                 self.eatenPills += 1
@@ -83,7 +80,6 @@ class PacMan(MovableCharacter):
     
     def moveNorth(self):
         if self.canGoNorth():
-            print("North",self.x,self.y)
             self.x=(self.x-1)%self.maze.HEIGHT
             if self.maze.takePill(self.x,self.y):
                 self.eatenPills += 1
