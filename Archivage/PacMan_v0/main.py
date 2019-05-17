@@ -12,19 +12,16 @@ import py_trees
 
 class Action(py_trees.behaviour.Behaviour):
     
-    def setAction(self,fonction,argument):
-        print("setAction",argument)
+    def setAction(self,fonction):
         self.action = fonction
-        self.argument = argument
     
     def update(self):
         status = py_trees.common.Status.RUNNING
-        res = self.action(self.argument)
+        res = self.action()
         if res is True:
             status = py_trees.common.Status.SUCCESS
         elif res is False:
             status = py_trees.common.Status.FAILURE
-        print(self.argument,status)
         return status
 
 
@@ -52,13 +49,8 @@ def randomMoveSouth():
 def randomMoveNorth():
     return random()<.5
 
-
-
-
 def random1_4():
-    rng = random()
-    print(rng)
-    return rng<.25
+    return random()<.25
 
 def random1_3():
     return random()<.33
@@ -67,38 +59,34 @@ def random1_2():
     return random()<.5
 
 
-def createEquiprobableBT(engine,character):
-    c = engine.characterList.get(character)
-    
+def createPacManEquiprobableBT(engine):
     root = py_trees.composites.Selector()
     
-    noPills = Condition("NoMorePills")
-    noPills.setCondition(engine.noMorePills)
+    noPills = py_trees.behaviour.Behaviour("NoMorePills")
     
     goWest = Action("Move West")
-    goWest.setAction(c.setDirection,"West")
+    goWest.setAction(engine.pacman.moveWest)
     
     goEast = Action("Move East")
-    goEast.setAction(c.setDirection,"East")
+    goEast.setAction(engine.pacman.moveEast)
     
     goSouth = Action("Move South")
-    goSouth.setAction(c.setDirection,"South")
+    goSouth.setAction(engine.pacman.moveSouth)
     
     goNorth = Action("Move North")
-    goNorth.setAction(c.setDirection,"North")
+    goNorth.setAction(engine.pacman.moveNorth)
     
     noWestWall = Condition("No West Wall")
-    noWestWall.setCondition(c.canGoWest)
+    noWestWall.setCondition(engine.pacman.canGoWest)
     
     noEastWall = Condition("No East Wall")
-    noEastWall.setCondition(c.canGoEast)
+    noEastWall.setCondition(engine.pacman.canGoEast)
     
     noSouthWall = Condition("No South Wall")
-    noSouthWall.setCondition(c.canGoSouth)
+    noSouthWall.setCondition(engine.pacman.canGoSouth)
     
     noNorthWall = Condition("No North Wall")
-    noNorthWall.setCondition(c.canGoNorth)
-   
+    noNorthWall.setCondition(engine.pacman.canGoNorth)
     
     random4 = Condition("Random 1/4")
     random4.setCondition(random1_4)
@@ -108,7 +96,6 @@ def createEquiprobableBT(engine,character):
     
     random2 = Condition("Random 1/2")
     random2.setCondition(random1_2)
-    
     
     sequenceW4 = py_trees.composites.Sequence("→",[random4,goWest])
     
@@ -198,6 +185,10 @@ def createEquiprobableBT(engine,character):
     selectorNS.add_children([sequenceN2,goSouth])
     
     
+    
+    
+    
+    
     decorateurCondition = py_trees.decorators.Condition(selector11,"",py_trees.common.Status.FAILURE)
     decorateurInversion = py_trees.decorators.Inverter(decorateurCondition,"")
     
@@ -207,40 +198,34 @@ def createEquiprobableBT(engine,character):
     
     return bt
     
-
-
-def createPacManRandomBT(engine,character):
-    random.seed(2)
-    
-    c = engine.characterList.get(character)
-    
+def createPacManRandomBT(engine):
     root = py_trees.composites.Selector()
     
     noPills = py_trees.behaviour.Behaviour("NoMorePills")
     
     goWest = Action("Move West")
-    goWest.setAction(c.setDirection,"West")
+    goWest.setAction(engine.pacman.moveWest)
     
     goEast = Action("Move East")
-    goEast.setAction(c.setDirection,"East")
+    goEast.setAction(engine.pacman.moveEast)
     
     goSouth = Action("Move South")
-    goSouth.setAction(c.setDirection,"South")
+    goSouth.setAction(engine.pacman.moveSouth)
     
     goNorth = Action("Move North")
-    goNorth.setAction(c.setDirection,"North")
+    goNorth.setAction(engine.pacman.moveNorth)
     
     noWestWall = Condition("No West Wall")
-    noWestWall.setCondition(c.canGoWest)
+    noWestWall.setCondition(engine.pacman.canGoWest)
     
     noEastWall = Condition("No East Wall")
-    noEastWall.setCondition(c.canGoEast)
+    noEastWall.setCondition(engine.pacman.canGoEast)
     
     noSouthWall = Condition("No South Wall")
-    noSouthWall.setCondition(c.canGoSouth)
+    noSouthWall.setCondition(engine.pacman.canGoSouth)
     
     noNorthWall = Condition("No North Wall")
-    noNorthWall.setCondition(c.canGoNorth)
+    noNorthWall.setCondition(engine.pacman.canGoNorth)
     
     okMoveWest = Condition("Random Move West")
     okMoveWest.setCondition(randomMoveWest)
@@ -270,36 +255,34 @@ def createPacManRandomBT(engine,character):
     
     return bt
 
-def createPacManDeterministeBT(engine,character):
-    c = engine.characterList.get(character)
-    
+def createPacManDeterministeBT(engine):
     root = py_trees.composites.Selector()
     
     noPills = py_trees.behaviour.Behaviour("NoMorePills")
     
     goWest = Action("Move West")
-    goWest.setAction(c.setDirection,"West")
+    goWest.setAction(engine.pacman.moveWest)
     
     goEast = Action("Move East")
-    goEast.setAction(c.setDirection,"East")
+    goEast.setAction(engine.pacman.moveEast)
     
     goSouth = Action("Move South")
-    goSouth.setAction(c.setDirection,"South")
+    goSouth.setAction(engine.pacman.moveSouth)
     
     goNorth = Action("Move North")
-    goNorth.setAction(c.setDirection,"North")
+    goNorth.setAction(engine.pacman.moveNorth)
     
     noWestWall = Condition("No West Wall")
-    noWestWall.setCondition(c.canGoWest)
+    noWestWall.setCondition(engine.pacman.canGoWest)
     
     noEastWall = Condition("No East Wall")
-    noEastWall.setCondition(c.canGoEast)
+    noEastWall.setCondition(engine.pacman.canGoEast)
     
     noSouthWall = Condition("No South Wall")
-    noSouthWall.setCondition(c.canGoSouth)
+    noSouthWall.setCondition(engine.pacman.canGoSouth)
     
     noNorthWall = Condition("No North Wall")
-    noNorthWall.setCondition(c.canGoNorth)
+    noNorthWall.setCondition(engine.pacman.canGoNorth)
     
     sequenceWest = py_trees.composites.Sequence("→",[noWestWall,goWest])
     sequenceEast = py_trees.composites.Sequence("→",[noEastWall,goEast])
@@ -322,7 +305,7 @@ if __name__ == "__main__":
     
     engine = PacManEngine()
     
-    bt = createEquiprobableBT(engine,"Pacman")
+    bt = createPacManEquiprobableBT(engine)
     
     bt.setup(timeout=15)
     try:
@@ -330,11 +313,9 @@ if __name__ == "__main__":
             500,
             py_trees.trees.CONTINUOUS_TICK_TOCK,
             None,
-            None
+            lambda x: engine.maze.display()
         )
     except KeyboardInterrupt:
         bt.interrupt()
-    
-    engine.stop()
-    engine.display()
-    
+        
+    engine.maze.display()

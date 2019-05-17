@@ -1,0 +1,82 @@
+digraph equiprobable {
+
+selector11[shape=point,label=""];
+
+selector21[shape=point,label=""];
+selector22[shape=point,label=""];
+
+selector31[shape=point,label=""];
+selector32[shape=point,label=""];
+selector33[shape=point,label=""];
+selector34[shape=point,label=""];
+
+selector41[shape=point,label=""];
+selector42[shape=point,label=""];
+selector43[shape=point,label=""];
+selector44[shape=point,label=""];
+selector45[shape=point,label=""];
+selector46[shape=point,label=""];
+selector47[shape=point,label=""];
+S[shape=point,label="S"];
+
+WENS[shape=none,label="WENS"];
+WEN[shape=none,label="WEN"];
+WES[shape=none,label="WES"];
+WE[shape=none,label="WE"];
+WNS[shape=none,label="WNS"];
+WN[shape=none,label="WN"];
+WS[shape=none,label="WS"];
+W[shape=none,label="W"];
+ENS[shape=none,label="ENS"];
+EN[shape=none,label="EN"];
+ES[shape=none,label="ES"];
+E[shape=none,label="E"];
+NS[shape=none,label="NS"];
+N[shape=none,label="N"];
+
+selector11 -> selector21 [label="W"];
+selector11 -> selector22;
+
+
+selector21 -> selector31 [label="E"];
+selector21 -> selector32;
+
+selector22 -> selector33 [label="E"];
+selector22 -> selector34;
+
+
+selector31 -> selector41 [label="N"];
+selector31 -> selector42;
+
+selector32 -> selector43 [label="N"];
+selector32 -> selector44;
+
+selector33 -> selector45 [label="N"];
+selector33 -> selector46;
+
+selector34 -> selector47 [label="N"];
+selector34 -> S;
+
+
+selector41 -> WENS [label="S"];
+selector41 -> WEN;
+
+selector42 -> WES [label="S"];
+selector42 -> WE;
+
+selector43 -> WNS [label="S"];
+selector43 -> WN;
+
+selector44 -> WS [label="S"];
+selector44 -> W;
+
+selector45 -> ENS [label="S"];
+selector45 -> EN;
+
+selector46 -> ES [label="S"];
+selector46 -> E;
+
+selector47 -> NS [label="S"];
+selector47 -> N;
+
+}

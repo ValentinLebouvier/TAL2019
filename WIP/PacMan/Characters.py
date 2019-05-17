@@ -30,22 +30,22 @@ class MovableCharacter(object):
     
     def canGoWest(self):
         movement = MovableCharacter.Directions.get("West")
-        print("canGoWest",self.maze.isWall(self.x+movement[0],self.y+movement[1]))
+        print("canGoWest",self.x+movement[0],self.y+movement[1],not self.maze.isWall(self.x+movement[0],self.y+movement[1]))
         return not self.maze.isWall(self.x+movement[0],self.y+movement[1])
     
     def canGoEast(self):
         movement = MovableCharacter.Directions.get("East")
-        print("canGoEast",self.maze.isWall(self.x+movement[0],self.y+movement[1]))
+        print("canGoEast",self.x+movement[0],self.y+movement[1],not self.maze.isWall(self.x+movement[0],self.y+movement[1]))
         return not self.maze.isWall(self.x+movement[0],self.y+movement[1])
     
     def canGoNorth(self):
         movement = MovableCharacter.Directions.get("North")
-        print("canGoNorth",self.maze.isWall(self.x+movement[0],self.y+movement[1]))
+        print("canGoNorth",self.x+movement[0],self.y+movement[1],not self.maze.isWall(self.x+movement[0],self.y+movement[1]))
         return not self.maze.isWall(self.x+movement[0],self.y+movement[1])
     
     def canGoSouth(self):
         movement = MovableCharacter.Directions.get("South")
-        print("canGoSouth",self.maze.isWall(self.x+movement[0],self.y+movement[1]))
+        print("canGoSouth",self.x+movement[0],self.y+movement[1],not self.maze.isWall(self.x+movement[0],self.y+movement[1]))
         return not self.maze.isWall(self.x+movement[0],self.y+movement[1])
     
     def canMove(self):
@@ -68,6 +68,7 @@ class PacMan(MovableCharacter):
         self.dy = 0
         self.maze = maze
         self.eatenPills = 0
+        if (self.maze.takePill(self.x,self.y)) : self.eatenPills+=1
         self.hasPower = False
         
     def canMove(self):
