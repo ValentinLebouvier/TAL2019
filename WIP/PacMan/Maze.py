@@ -57,11 +57,12 @@ class Maze(object):
     def __init__(self,random_maze=False):
         self.maze = Maze.init_maze(random_maze)
         
+        
     def isWall(self,x,y):
         return self.maze[x%Maze.HEIGHT][y%Maze.WIDTH]==Maze.Wall
     
     def hasPill(self,x,y):
-        return self.maze[x][y]==Maze.Pill
+        return self.maze[x%Maze.HEIGHT][y%Maze.WIDTH]==Maze.Pill
     
     def takePill(self,x,y):
         if self.hasPill(x,y):
@@ -82,6 +83,16 @@ class Maze(object):
             for y in range(Maze.WIDTH):
                 print(tileset[self.maze[x][y]], sep='', end=' ')
             print()
+    
+    def displayText(self):
+        res = [["" for y in range(Maze.WIDTH)] for x in range(Maze.HEIGHT)]
+        tileset = [".","o","▓"]
+        for x in range(Maze.HEIGHT):
+            for y in range(Maze.WIDTH):
+                res[x][y] = tileset[self.maze[x][y]]
+        return res
+                
+        
                        
                        
             

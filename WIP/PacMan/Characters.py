@@ -6,6 +6,8 @@ Created on Wed May 15 08:53:47 2019
 @author: valentinlebouvier
 """
 
+from Maze import Maze
+
 class MovableCharacter(object):
     
     Directions = {
@@ -24,28 +26,24 @@ class MovableCharacter(object):
     
     def setDirection(self,direction):
         movement = MovableCharacter.Directions.get(direction)
-        print("setDirection : ",direction,movement)
         self.dx = movement[0]
         self.dy = movement[1]
+        return True
     
     def canGoWest(self):
         movement = MovableCharacter.Directions.get("West")
-        print("canGoWest",self.x+movement[0],self.y+movement[1],not self.maze.isWall(self.x+movement[0],self.y+movement[1]))
         return not self.maze.isWall(self.x+movement[0],self.y+movement[1])
     
     def canGoEast(self):
         movement = MovableCharacter.Directions.get("East")
-        print("canGoEast",self.x+movement[0],self.y+movement[1],not self.maze.isWall(self.x+movement[0],self.y+movement[1]))
         return not self.maze.isWall(self.x+movement[0],self.y+movement[1])
     
     def canGoNorth(self):
         movement = MovableCharacter.Directions.get("North")
-        print("canGoNorth",self.x+movement[0],self.y+movement[1],not self.maze.isWall(self.x+movement[0],self.y+movement[1]))
         return not self.maze.isWall(self.x+movement[0],self.y+movement[1])
     
     def canGoSouth(self):
         movement = MovableCharacter.Directions.get("South")
-        print("canGoSouth",self.x+movement[0],self.y+movement[1],not self.maze.isWall(self.x+movement[0],self.y+movement[1]))
         return not self.maze.isWall(self.x+movement[0],self.y+movement[1])
     
     def canMove(self):
@@ -72,13 +70,30 @@ class PacMan(MovableCharacter):
         self.hasPower = False
         
     def canMove(self):
-        #print("canMove",self.x,self.y,self.maze.isWall(self.x+self.dx,self.y+self.dy))
         return not self.maze.isWall(self.x+self.dx,self.y+self.dy)
     
     def move(self):
         if self.canMove():
-            print("Move",self.dx,self.dy)
-            self.x += self.dx
-            self.y += self.dy
+            self.x = (self.x+self.dx)% Maze.HEIGHT
+            self.y = (self.y+self.dy)% Maze.WIDTH
             if self.maze.takePill(self.x,self.y):
                 self.eatenPills += 1
+
+class Ghost(MovableCharacter):
+    def __init__(self,x,y,maze,name="PacMan"):
+        self.name = name
+        self.x = x
+        self.y = y
+        self.dx = 0
+        self.dy = 0
+        self.maze = maze
+        self.isEaten = False
+        
+    def canMove(self):
+        return not self.maze.isWall(self.x+self.dx,self.y+self.dy)
+    
+    def move(self):
+        if self.canMove():
+            self.x = (self.x+self.dx)% Maze.HEIGHT
+            self.y = (self.y+self.dy)% Maze.WIDTH
+    

@@ -9,22 +9,24 @@ Created on Wed May 15 10:56:01 2019
 from PacManEngine import PacManEngine
 from random import random
 import py_trees
+import time
 
 class Action(py_trees.behaviour.Behaviour):
     
-    def setAction(self,fonction,argument):
-        print("setAction",argument)
+    def setAction(self,fonction,argument=None):
         self.action = fonction
         self.argument = argument
     
     def update(self):
         status = py_trees.common.Status.RUNNING
-        res = self.action(self.argument)
+        if self.argument is None:
+            res = self.action()
+        else:
+            res = self.action(self.argument)
         if res is True:
             status = py_trees.common.Status.SUCCESS
         elif res is False:
             status = py_trees.common.Status.FAILURE
-        print(self.argument,status)
         return status
 
 
@@ -57,7 +59,6 @@ def randomMoveNorth():
 
 def random1_4():
     rng = random()
-    print(rng)
     return rng<.25
 
 def random1_3():
@@ -68,7 +69,10 @@ def random1_2():
 
 
 def createEquiprobableBT(engine,character):
-    c = engine.characterList.get(character)
+    if character in engine.PacmanList.keys():
+        c = engine.PacmanList.get(character)
+    else:
+        c = engine.GhostList.get(character)
     
     root = py_trees.composites.Selector()
     
@@ -206,128 +210,39 @@ def createEquiprobableBT(engine,character):
     bt = py_trees.trees.BehaviourTree(root)
     
     return bt
-    
 
-
-def createPacManRandomBT(engine,character):
-    random.seed(2)
+def endGame(bt):
     
-    c = engine.characterList.get(character)
+    bt.interrupt()
+    time.sleep(1)
     
-    root = py_trees.composites.Selector()
-    
-    noPills = py_trees.behaviour.Behaviour("NoMorePills")
-    
-    goWest = Action("Move West")
-    goWest.setAction(c.setDirection,"West")
-    
-    goEast = Action("Move East")
-    goEast.setAction(c.setDirection,"East")
-    
-    goSouth = Action("Move South")
-    goSouth.setAction(c.setDirection,"South")
-    
-    goNorth = Action("Move North")
-    goNorth.setAction(c.setDirection,"North")
-    
-    noWestWall = Condition("No West Wall")
-    noWestWall.setCondition(c.canGoWest)
-    
-    noEastWall = Condition("No East Wall")
-    noEastWall.setCondition(c.canGoEast)
-    
-    noSouthWall = Condition("No South Wall")
-    noSouthWall.setCondition(c.canGoSouth)
-    
-    noNorthWall = Condition("No North Wall")
-    noNorthWall.setCondition(c.canGoNorth)
-    
-    okMoveWest = Condition("Random Move West")
-    okMoveWest.setCondition(randomMoveWest)
-    
-    okMoveEast = Condition("Random Move East")
-    okMoveEast.setCondition(randomMoveEast)
-    
-    okMoveNorth = Condition("Random Move North")
-    okMoveNorth.setCondition(randomMoveNorth)
-    
-    okMoveSouth = Condition("Random Move South")
-    okMoveSouth.setCondition(randomMoveSouth)
-    
-    sequenceWest = py_trees.composites.Sequence("→",[noWestWall,okMoveWest,goWest])
-    sequenceEast = py_trees.composites.Sequence("→",[noEastWall,okMoveEast,goEast])
-    sequenceSouth = py_trees.composites.Sequence("→",[noSouthWall,okMoveSouth,goSouth])
-    sequenceNorth = py_trees.composites.Sequence("→",[noNorthWall,okMoveNorth,goNorth])
-    
-    selector = py_trees.composites.Selector("?",[sequenceWest,sequenceNorth,sequenceEast,sequenceSouth])
-    
-    decorateurCondition = py_trees.decorators.Condition(selector,"",py_trees.common.Status.FAILURE)
-    decorateurInversion = py_trees.decorators.Inverter(decorateurCondition,"")
-    
-    root.add_children([noPills,decorateurInversion])
-    
-    bt = py_trees.trees.BehaviourTree(root)
-    
-    return bt
-
-def createPacManDeterministeBT(engine,character):
-    c = engine.characterList.get(character)
-    
-    root = py_trees.composites.Selector()
-    
-    noPills = py_trees.behaviour.Behaviour("NoMorePills")
-    
-    goWest = Action("Move West")
-    goWest.setAction(c.setDirection,"West")
-    
-    goEast = Action("Move East")
-    goEast.setAction(c.setDirection,"East")
-    
-    goSouth = Action("Move South")
-    goSouth.setAction(c.setDirection,"South")
-    
-    goNorth = Action("Move North")
-    goNorth.setAction(c.setDirection,"North")
-    
-    noWestWall = Condition("No West Wall")
-    noWestWall.setCondition(c.canGoWest)
-    
-    noEastWall = Condition("No East Wall")
-    noEastWall.setCondition(c.canGoEast)
-    
-    noSouthWall = Condition("No South Wall")
-    noSouthWall.setCondition(c.canGoSouth)
-    
-    noNorthWall = Condition("No North Wall")
-    noNorthWall.setCondition(c.canGoNorth)
-    
-    sequenceWest = py_trees.composites.Sequence("→",[noWestWall,goWest])
-    sequenceEast = py_trees.composites.Sequence("→",[noEastWall,goEast])
-    sequenceSouth = py_trees.composites.Sequence("→",[noSouthWall,goSouth])
-    sequenceNorth = py_trees.composites.Sequence("→",[noNorthWall,goNorth])
-    
-    selector = py_trees.composites.Selector("?",[sequenceWest,sequenceNorth,sequenceEast,sequenceSouth])
-    
-    decorateurCondition = py_trees.decorators.Condition(selector,"",py_trees.common.Status.FAILURE)
-    decorateurInversion = py_trees.decorators.Inverter(decorateurCondition,"")
-    
-    root.add_children([noPills,decorateurInversion])
-    
-    bt = py_trees.trees.BehaviourTree(root)
-    
-    return bt
+    print("END OF GAME")
 
 
 if __name__ == "__main__":
     
     engine = PacManEngine()
     
-    bt = createEquiprobableBT(engine,"Pacman")
+    btPacman = createEquiprobableBT(engine,"Pacman")
+    btPinky = createEquiprobableBT(engine,"Pinky")
+    perdu = Condition("perdu")
+    perdu.setCondition(engine.hasLost)
+    
+    sequence = py_trees.composites.Sequence("→")
+    
+    bt = py_trees.trees.BehaviourTree(sequence)
+    
+    parallel = py_trees.composites.Parallel("⇉",py_trees.common.ParallelPolicy.SuccessOnOne(),[perdu,btPacman.root,btPinky.root])
+    endOfGame = Action("EOG")
+    endOfGame.setAction(endGame,bt)
+    
+    sequence.add_children([parallel,endOfGame])
+    
     
     bt.setup(timeout=15)
     try:
         bt.tick_tock(
-            500,
+            1000,
             py_trees.trees.CONTINUOUS_TICK_TOCK,
             None,
             None
