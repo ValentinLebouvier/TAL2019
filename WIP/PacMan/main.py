@@ -32,29 +32,19 @@ class Action(py_trees.behaviour.Behaviour):
 
 class Condition(py_trees.behaviour.Behaviour):
     
-    def setCondition(self,condition):
+    def setCondition(self, condition, argument=None):
         self.condition = condition
+        self.argument = argument
     
     def update(self):
-        res = self.condition()
+        if self.argument is None:
+            res = self.condition()
+        else:
+            res = self.condition(self.argument)
         if res:
             return py_trees.common.Status.SUCCESS
         else:
             return py_trees.common.Status.FAILURE
-        
-def randomMoveWest():
-    return random()<.25
-
-def randomMoveEast():
-    return random()<.75
-
-def randomMoveSouth():
-    return random()<1.
-
-def randomMoveNorth():
-    return random()<.5
-
-
 
 
 def random1_4():
@@ -67,17 +57,11 @@ def random1_3():
 def random1_2():
     return random()<.5
 
-
 def createEquiprobableBT(engine,character):
     if character in engine.PacmanList.keys():
         c = engine.PacmanList.get(character)
     else:
         c = engine.GhostList.get(character)
-    
-    root = py_trees.composites.Selector()
-    
-    noPills = Condition("NoMorePills")
-    noPills.setCondition(engine.noMorePills)
     
     goWest = Action("Move West")
     goWest.setAction(c.setDirection,"West")
@@ -92,16 +76,16 @@ def createEquiprobableBT(engine,character):
     goNorth.setAction(c.setDirection,"North")
     
     noWestWall = Condition("No West Wall")
-    noWestWall.setCondition(c.canGoWest)
+    noWestWall.setCondition(c.canGo, "West")
     
     noEastWall = Condition("No East Wall")
-    noEastWall.setCondition(c.canGoEast)
+    noEastWall.setCondition(c.canGo, "East")
     
     noSouthWall = Condition("No South Wall")
-    noSouthWall.setCondition(c.canGoSouth)
+    noSouthWall.setCondition(c.canGo,"South")
     
     noNorthWall = Condition("No North Wall")
-    noNorthWall.setCondition(c.canGoNorth)
+    noNorthWall.setCondition(c.canGo, "North")
    
     
     random4 = Condition("Random 1/4")
@@ -205,9 +189,7 @@ def createEquiprobableBT(engine,character):
     decorateurCondition = py_trees.decorators.Condition(selector11,"",py_trees.common.Status.FAILURE)
     decorateurInversion = py_trees.decorators.Inverter(decorateurCondition,"")
     
-    root.add_children([noPills,decorateurInversion])
-    
-    bt = py_trees.trees.BehaviourTree(root)
+    bt = py_trees.trees.BehaviourTree(decorateurInversion)
     
     return bt
 
@@ -223,16 +205,22 @@ if __name__ == "__main__":
     
     engine = PacManEngine()
     
-    btPacman = createEquiprobableBT(engine,"Pacman")
-    btPinky = createEquiprobableBT(engine,"Pinky")
     perdu = Condition("perdu")
     perdu.setCondition(engine.hasLost)
+    
+    btPacman = createEquiprobableBT(engine,"Pacman")
+    btMsPacman = createEquiprobableBT(engine,"MsPacman")
+    btJrPacman = createEquiprobableBT(engine,"JrPacman")
+    btPinky = createEquiprobableBT(engine,"Pinky")
+    btBlinky = createEquiprobableBT(engine,"Blinky")
+    btInky = createEquiprobableBT(engine,"Inky")
+    btClyde = createEquiprobableBT(engine,"Clyde")
     
     sequence = py_trees.composites.Sequence("→")
     
     bt = py_trees.trees.BehaviourTree(sequence)
     
-    parallel = py_trees.composites.Parallel("⇉",py_trees.common.ParallelPolicy.SuccessOnOne(),[perdu,btPacman.root,btPinky.root])
+    parallel = py_trees.composites.Parallel("⇉",py_trees.common.ParallelPolicy.SuccessOnOne(),[perdu,btPacman.root,btMsPacman.root,btJrPacman.root,btPinky.root,btBlinky.root,btInky.root,btClyde.root])
     endOfGame = Action("EOG")
     endOfGame.setAction(endGame,bt)
     
@@ -242,7 +230,7 @@ if __name__ == "__main__":
     bt.setup(timeout=15)
     try:
         bt.tick_tock(
-            1000,
+            250,
             py_trees.trees.CONTINUOUS_TICK_TOCK,
             None,
             None
@@ -251,5 +239,5 @@ if __name__ == "__main__":
         bt.interrupt()
     
     engine.stop()
-    engine.display()
+    engine.displayText()
     
