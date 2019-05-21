@@ -19,13 +19,13 @@ class PacManEngine(object):
         self.PacmanList = {}
         self.GhostList = {}
         self.PacmanList["Pacman"] = PacMan(1,1,1,self.maze)
-        self.PacmanList["MsPacman"] = PacMan(1,26,0.9,self.maze)
-        self.PacmanList["JrPacman"] = PacMan(29,14,0.8,self.maze)
-        self.GhostList["Pinky"] = Ghost(11,9,0.7,self.maze)
-        self.GhostList["Blinky"] = Ghost(11,18,0.6,self.maze)
-        self.GhostList["Inky"] = Ghost(17,9,0.5,self.maze)
-        self.GhostList["Clyde"] = Ghost(17,18,0.4,self.maze)
-        self.gameSpeed = 0.2
+        #self.PacmanList["MsPacman"] = PacMan(1,26,0.9,self.maze)
+        #self.PacmanList["JrPacman"] = PacMan(29,14,0.8,self.maze)
+        #self.GhostList["Pinky"] = Ghost(11,9,0.7,self.maze)
+        #self.GhostList["Blinky"] = Ghost(11,18,0.6,self.maze)
+        #self.GhostList["Inky"] = Ghost(17,9,0.5,self.maze)
+        #self.GhostList["Clyde"] = Ghost(17,18,0.4,self.maze)
+        self.gameSpeed = .45
         self.stop_thread = False
         self.thread = threading.Thread(target=self.run, args=(lambda : self.stop_thread,))
         self.thread.daemon = True                            # Daemonize thread
@@ -67,9 +67,11 @@ class PacManEngine(object):
     def updateSeen(self):
         for c in self.PacmanList.values():
             c.decreaseLastSeen()
+        for g in self.GhostList.values():
+            g.decreaseLastSeen()
+        for c in self.PacmanList.values():
             for g in self.GhostList.values():
-                g.decreaseLastSeen()
-                coord1,coord2 = c.getCoordinates(), g.getCoordinates
+                coord1,coord2 = c.getCoordinates(), g.getCoordinates()
                 if self.maze.canSee(coord1,coord2):
                     c.updateSeen(g.name,coord2)
                     g.updateSeen(c.name,coord1)

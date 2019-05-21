@@ -25,9 +25,10 @@ class MovableCharacter(object):
         return (self.x,self.y)
     
     def setDirection(self,direction):
-        movement = MovableCharacter.Directions.get(direction)
-        self.dx = movement[0]
-        self.dy = movement[1]
+        if not (direction is None):
+            movement = MovableCharacter.Directions.get(direction)
+            self.dx = movement[0]
+            self.dy = movement[1]
         return True
     
     def canGo(self,direction):
@@ -41,16 +42,28 @@ class MovableCharacter(object):
         if not name in self.lastSeen:
             self.lastSeen.put(name,[coord,MovableCharacter.lastSeenCounter])
         else:
-            self.lastSeen[name][0] = coord
+            self.lastSeen[name] = [coord,MovableCharacter.lastSeenCounter]
     
     def decreaseLastSeen(self):
-        for ls in self.lastSeen.keys:
+        for ls in self.lastSeen.keys():
             self.lastSeen[ls][1] -= 1
             if self.lastSeen[ls][1]==0:
                 self.lastSeen.pop(ls)
     
     def chase(self, character):
+        if not(self.lastSeen.contains(character)):
+            return False
+        coord = self.lastSeen[character][0]
+        direction = self.maze.direction(self.getCoordinates(),coord)
+        self.setDirection(direction)
+    
+    def chaseAny(self):
+        if self.alone():
+            return False
         pass
+    
+    def alone(self):
+        return list(self.lastSeen.keys())==[]
     
     def flee(self):
         pass
@@ -83,6 +96,15 @@ class PacMan(MovableCharacter):
             self.y = (self.y+self.speed*self.dy)%self.maze.width
             if self.maze.takePill(int(self.x),int(self.y)):
                 self.eatenPills += 1
+    
+    def gotoPill(self):
+        coord1 = self.getCoordinates()
+        coord2 = self.maze.closestPill(coord1)
+        if coord2 is None:
+            return False
+        direction = self.maze.direction(coord1,coord2)
+        self.setDirection(direction)
+        return True
 
 class Ghost(MovableCharacter):
     
@@ -101,4 +123,3 @@ class Ghost(MovableCharacter):
         if self.canMove():
             self.x = (self.x+self.speed*self.dx)%self.maze.height
             self.y = (self.y+self.speed*self.dy)%self.maze.width
-    

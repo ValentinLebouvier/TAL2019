@@ -193,6 +193,29 @@ def createEquiprobableBT(engine,character):
     
     return bt
 
+def createPillSeekingBT(engine,character):
+    
+    c = engine.PacmanList.get(character)
+    
+    selector = py_trees.composites.Selector("?")
+    
+    alone = Condition("Alone")
+    alone.setCondition(c.alone)
+    
+    gotoPill = Action("Goto Pill")
+    gotoPill.setAction(c.gotoPill)
+    
+    sequence = py_trees.composites.Sequence("→",[alone,gotoPill])
+    random = createEquiprobableBT(engine,character).root
+    
+    selector.add_children([sequence,random])
+    
+    bt = py_trees.trees.BehaviourTree(selector)
+    
+    return bt
+
+
+
 def endGame(bt):
     
     bt.interrupt()
@@ -208,19 +231,22 @@ if __name__ == "__main__":
     perdu = Condition("perdu")
     perdu.setCondition(engine.hasLost)
     
-    btPacman = createEquiprobableBT(engine,"Pacman")
-    btMsPacman = createEquiprobableBT(engine,"MsPacman")
-    btJrPacman = createEquiprobableBT(engine,"JrPacman")
-    btPinky = createEquiprobableBT(engine,"Pinky")
-    btBlinky = createEquiprobableBT(engine,"Blinky")
-    btInky = createEquiprobableBT(engine,"Inky")
-    btClyde = createEquiprobableBT(engine,"Clyde")
+    gagne = Condition("Gagné")
+    gagne.setCondition(engine.hasWon)
+    
+    btPacman = createPillSeekingBT(engine,"Pacman")
+    #btMsPacman = createEquiprobableBT(engine,"MsPacman")
+    #btJrPacman = createEquiprobableBT(engine,"JrPacman")
+    #btPinky = createEquiprobableBT(engine,"Pinky")
+    #btBlinky = createEquiprobableBT(engine,"Blinky")
+    #btInky = createEquiprobableBT(engine,"Inky")
+    #btClyde = createEquiprobableBT(engine,"Clyde")
     
     sequence = py_trees.composites.Sequence("→")
     
     bt = py_trees.trees.BehaviourTree(sequence)
     
-    parallel = py_trees.composites.Parallel("⇉",py_trees.common.ParallelPolicy.SuccessOnOne(),[perdu,btPacman.root,btMsPacman.root,btJrPacman.root,btPinky.root,btBlinky.root,btInky.root,btClyde.root])
+    parallel = py_trees.composites.Parallel("⇉",py_trees.common.ParallelPolicy.SuccessOnOne(),[gagne,perdu,btPacman.root])#,btMsPacman.root,btJrPacman.root,btPinky.root,btBlinky.root,btInky.root,btClyde.root])
     endOfGame = Action("EOG")
     endOfGame.setAction(endGame,bt)
     
@@ -230,7 +256,7 @@ if __name__ == "__main__":
     bt.setup(timeout=15)
     try:
         bt.tick_tock(
-            250,
+            500,
             py_trees.trees.CONTINUOUS_TICK_TOCK,
             None,
             None

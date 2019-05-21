@@ -17,6 +17,20 @@ class Maze(object):
     Pill = 1
     Empty = 0
     
+    Directions = {
+            "West" : (0,-1),
+            "East" : (0,1),
+            "North" : (-1,0),
+            "South" : (1,0)
+                  }
+    ReverseDirections = {
+            (0,0):None,
+            (0,-1):"West",
+            (0,1):"East",
+            (-1,0):"North",
+            (1,0):"South"
+            }
+    
     def init_maze(height, width, random=True):
         maze = [[1 for y in range(width)] for x in range(height)]
         if random:
@@ -55,6 +69,7 @@ class Maze(object):
                     14*[-1] + [-1]*14
                 ]
         return maze
+    
         
     def __init__(self, height=None, width=None, random_maze=False):
         if height is None:
@@ -66,7 +81,22 @@ class Maze(object):
         else:
             self.width = width            
         self.maze = Maze.init_maze(self.height,self.width,random_maze)
+        self.nbOfPills = sum(1 for x in range(self.height) for y in range(self.width) if self.hasPill(x,y))
+        self.createGraph()
         
+    def createGraph(self):
+        self.graph = nx.Graph()
+        sommets = [(x,y) for x in range(self.height) for y in range(self.width) if not self.isWall(x,y)]
+        self.graph.add_nodes_from(sommets)
+        edges = [(coord1,coord2,1) for coord1 in sommets for coord2 in sommets if self.isNextTo(coord1,coord2)]
+        self.graph.add_weighted_edges_from(edges)
+    
+    def isNextTo(self,coord1,coord2):
+        return ( 
+                (coord1[0]==coord2[0] and (coord1[1]==(coord2[1]+1)%self.width or coord1[1]==(coord2[1]-1)&self.width))
+                or (coord1[1]==coord2[1] and (coord1[0]==(coord2[0]+1)%self.height or coord1[0]==(coord2[0]-1)%self.height))
+                )
+                
         
     def isWall(self,x,y):
         return self.maze[x%self.height][y%self.width]==Maze.Wall
@@ -103,10 +133,22 @@ class Maze(object):
         return res
     
     def direction(self, coordStart, coordEnd):
-        pass
+        path = nx.astar_path(self.graph,coordStart,coordEnd)
+        firstStep = (path[1][0]-coordStart[0],path[1][1]-coordStart[1])
+        return Maze.ReverseDirections[firstStep]
+        
     
     def closestPill(self, coord):
-        pass
+        adjs = [adj for adj in self.graph[coord].keys()]
+        i=0
+        while i<len(adjs):
+            adj = adjs[i]
+            if self.hasPill(adj[0],adj[1]):
+                return adj
+            adjs = adjs+[a for a in self.graph[adj].keys() if not a in adj]
+            i +=1
+        return None
+        
     
     def closestPowerPill(self, coord):
         pass
@@ -117,7 +159,7 @@ class Maze(object):
                 if self.isWall(coordStart[0],y):
                     return False
             return True
-        elif coordStart[0]==coordEnd[0]:
+        elif coordStart[1]==coordEnd[1]:
             for x in range(coordStart[0],coordEnd[0]):
                 if self.isWall(x, coordStart[1]):
                     return False
