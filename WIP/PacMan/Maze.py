@@ -31,6 +31,7 @@ class Maze(object):
             (1,0):"South"
             }
     
+    
     def init_maze(height, width, random=True):
         maze = [[1 for y in range(width)] for x in range(height)]
         if random:
@@ -84,71 +85,6 @@ class Maze(object):
         self.nbOfPills = sum(1 for x in range(self.height) for y in range(self.width) if self.hasPill(x,y))
         self.createGraph()
         
-    def createGraph(self):
-        self.graph = nx.Graph()
-        sommets = [(x,y) for x in range(self.height) for y in range(self.width) if not self.isWall(x,y)]
-        self.graph.add_nodes_from(sommets)
-        edges = [(coord1,coord2) for coord1 in sommets for coord2 in sommets if self.isNextTo(coord1,coord2)]
-        self.graph.add_edges_from(edges)
-    
-    def isNextTo(self,coord1,coord2):
-        return ( 
-                (coord1[0]==coord2[0] and (coord1[1]==(coord2[1]+1)%self.width or coord1[1]==(coord2[1]-1)%self.width))
-                or (coord1[1]==coord2[1] and (coord1[0]==(coord2[0]+1)%self.height or coord1[0]==(coord2[0]-1)%self.height))
-                )
-                
-        
-    def isWall(self,x,y):
-        return self.maze[x%self.height][y%self.width]==Maze.Wall
-    
-    def hasPill(self,x,y):
-        return self.maze[x%self.height][y%self.width]==Maze.Pill
-    
-    def takePill(self,x,y):
-        if self.hasPill(x,y):
-            self.maze[x][y]=Maze.Empty
-            self.nbOfPills-=1
-            return True
-        return False
-    
-    def hasNoPill(self):
-        return self.nbOfPills==0
-    
-    def display(self):
-        tileset = [".","o","▓"]
-        for x in range(self.height):
-            for y in range(self.width):
-                print(tileset[self.maze[x][y]], sep='', end=' ')
-            print()
-    
-    def displayText(self):
-        res = [["" for y in range(self.width)] for x in range(self.height)]
-        tileset = [".","o","▓"]
-        for x in range(self.height):
-            for y in range(self.width):
-                res[x][y] = tileset[self.maze[x][y]]
-        return res
-    
-    def direction(self, coordStart, coordEnd):
-        nextCoord = nx.shortest_path(self.graph,coordStart,coordEnd)[1]
-        firstStep = (nextCoord[0]-coordStart[0],nextCoord[1]-coordStart[1])
-        if abs(firstStep[0])==self.height-1:
-            firstStep = (-firstStep[0]//(self.height-1),firstStep[1])
-        if abs(firstStep[1])==self.width-1:
-            firstStep = (firstStep[0],-firstStep[1]//(self.width-1))
-        return Maze.ReverseDirections[firstStep]
-        
-    
-    def closestPill(self, coord):
-        for coord2,succ in nx.bfs_successors(self.graph,coord):
-            if self.hasPill(coord2[0],coord2[1]):
-                return coord2
-        return None
-        
-    
-    def closestPowerPill(self, coord):
-        pass
-    
     def canSee(self, coordStart, coordEnd):
         if coordStart[0]==coordEnd[0]:
             for y in range(coordStart[1],coordEnd[1]):
@@ -161,6 +97,85 @@ class Maze(object):
                     return False
             return True
         return False
+
+    def closestAmong(self,coordStart,characters):
+        closest = None
+        closestDist = self.height*self.width
+        for c in characters:
+            coord = characters[c][0]
+            dist = self.distance(coordStart,coord)
+            if dist<closestDist:
+                closest = coord
+                closestDist = dist
+        return closest
+
+    def closestPill(self, coord):
+        for coord2,succ in nx.bfs_successors(self.graph,coord):
+            if self.hasPill(coord2[0],coord2[1]):
+                return coord2
+        return None
+    
+    def createGraph(self):
+        self.graph = nx.Graph()
+        sommets = [(x,y) for x in range(self.height) for y in range(self.width) if not self.isWall(x,y)]
+        self.graph.add_nodes_from(sommets)
+        edges = [(coord1,coord2) for coord1 in sommets for coord2 in sommets if self.isNextTo(coord1,coord2)]
+        self.graph.add_edges_from(edges)
+    
+    def display(self):
+        tileset = [".","o","▓"]
+        for x in range(self.height):
+            for y in range(self.width):
+                print(tileset[self.maze[x][y]], sep='', end=' ')
+            print()
+    
+    
+    def displayText(self):
+        res = [["" for y in range(self.width)] for x in range(self.height)]
+        tileset = [".","o","▓"]
+        for x in range(self.height):
+            for y in range(self.width):
+                res[x][y] = tileset[self.maze[x][y]]
+        return res
+    
+    def distance(self,coordStart,coordEnd):
+        return nx.shortest_path_length(self.graph,coordStart,coordEnd)
+    
+    def direction(self, coordStart, coordEnd):
+        nextCoord = nx.shortest_path(self.graph,coordStart,coordEnd)[1]
+        firstStep = (nextCoord[0]-coordStart[0],nextCoord[1]-coordStart[1])
+        if abs(firstStep[0])==self.height-1:
+            firstStep = (-firstStep[0]//(self.height-1),firstStep[1])
+        if abs(firstStep[1])==self.width-1:
+            firstStep = (firstStep[0],-firstStep[1]//(self.width-1))
+        return Maze.ReverseDirections[firstStep]
+
+    def hasNoPill(self):
+        return self.nbOfPills==0
+
+    def hasPill(self,x,y):
+        return self.maze[x%self.height][y%self.width]==Maze.Pill
+
+    def isNextTo(self,coord1,coord2):
+        return ( 
+                (coord1[0]==coord2[0] and (coord1[1]==(coord2[1]+1)%self.width or coord1[1]==(coord2[1]-1)%self.width))
+                or (coord1[1]==coord2[1] and (coord1[0]==(coord2[0]+1)%self.height or coord1[0]==(coord2[0]-1)%self.height))
+                )
+        
+    def isWall(self,x,y):
+        return self.maze[x%self.height][y%self.width]==Maze.Wall
+    
+    
+    def takePill(self,x,y):
+        if self.hasPill(x,y):
+            self.maze[x][y]=Maze.Empty
+            self.nbOfPills-=1
+            return True
+        return False
+    
+    
+        
+    
         
                        
                        

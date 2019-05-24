@@ -224,11 +224,15 @@ def createPillSeekingBT(engine,character):
 
 
 
-def endGame(bt):
-    
-    bt.interrupt()
+def endGame(args):
     
     print("END OF GAME")
+    args[1].interrupt()
+    if (args[0].hasWon()):
+        print("Pacman a gagné")
+    else:
+        print("Pacman a perdu")
+    
 
 
 if __name__ == "__main__":
@@ -238,50 +242,50 @@ if __name__ == "__main__":
     for v in ["Alone","perdu","Gagné","Goto Pill","Random 1/2","Random 1/3","Random 1/4","No West Wall","No East Wall","No North Wall","No South Wall","Move West","Move East","Move South","Move North","EOG"]:
         blackboard.times[v] = []
     
-    engine = PacManEngine()
+    for i in range(1):
+        engine = PacManEngine()
+        
+        perdu = Condition("perdu")
+        perdu.setCondition(engine.hasLost)
+        
+        gagne = Condition("Gagné")
+        gagne.setCondition(engine.hasWon)
+        
+        btPacman = createPillSeekingBT(engine,"Pacman")
+        #btMsPacman = createEquiprobableBT(engine,"MsPacman")
+        #btJrPacman = createEquiprobableBT(engine,"JrPacman")
+        btPinky = createEquiprobableBT(engine,"Pinky")
+        #btBlinky = createEquiprobableBT(engine,"Blinky")
+        #btInky = createEquiprobableBT(engine,"Inky")
+        #btClyde = createEquiprobableBT(engine,"Clyde")
+        
+        sequence = py_trees.composites.Sequence("→")
+        
+        bt = py_trees.trees.BehaviourTree(sequence)
+        
+        parallel = py_trees.composites.Parallel("⇉",py_trees.common.ParallelPolicy.SuccessOnOne(),[btPacman.root,btPinky.root])#,btMsPacman.root,btJrPacman.root,btPinky.root,btBlinky.root,btInky.root,btClyde.root])
+        
+        selector = py_trees.composites.Selector("?",[gagne,perdu,parallel])
+        
+        endOfGame = Action("EOG")
+        endOfGame.setAction(endGame,(engine,bt))
+        
+        sequence.add_children([selector,endOfGame])
+        
+        bt.setup(timeout=15)
+        try:
+            bt.tick_tock(
+                500,
+                py_trees.trees.CONTINUOUS_TICK_TOCK,
+                None,
+                None
+            )
+        except KeyboardInterrupt:
+            bt.interrupt()
+        
+        engine.stop()
     
-    perdu = Condition("perdu")
-    perdu.setCondition(engine.hasLost)
-    
-    gagne = Condition("Gagné")
-    gagne.setCondition(engine.hasWon)
-    
-    btPacman = createPillSeekingBT(engine,"Pacman")
-    #btMsPacman = createEquiprobableBT(engine,"MsPacman")
-    #btJrPacman = createEquiprobableBT(engine,"JrPacman")
-    btPinky = createEquiprobableBT(engine,"Pinky")
-    #btBlinky = createEquiprobableBT(engine,"Blinky")
-    #btInky = createEquiprobableBT(engine,"Inky")
-    #btClyde = createEquiprobableBT(engine,"Clyde")
-    
-    sequence = py_trees.composites.Sequence("→")
-    
-    bt = py_trees.trees.BehaviourTree(sequence)
-    
-    parallel = py_trees.composites.Parallel("⇉",py_trees.common.ParallelPolicy.SuccessOnOne(),[btPacman.root,btPinky.root])#,btMsPacman.root,btJrPacman.root,btPinky.root,btBlinky.root,btInky.root,btClyde.root])
-    
-    selector = py_trees.composites.Selector("?",[gagne,perdu,parallel])
-    
-    endOfGame = Action("EOG")
-    endOfGame.setAction(endGame,bt)
-    
-    sequence.add_children([selector,endOfGame])
-    
-    tStart = time.time()
-    
-    bt.setup(timeout=15)
-    try:
-        bt.tick_tock(
-            50,
-            py_trees.trees.CONTINUOUS_TICK_TOCK,
-            None,
-            None
-        )
-    except KeyboardInterrupt:
-        bt.interrupt()
-    
-    tEnd = time.time()
-    
-    engine.stop()
-    engine.displayText()
+    for v in blackboard.times:
+        if len(blackboard.times[v])!=0:
+            print(v,sum(blackboard.times[v])/len(blackboard.times[v]))
     
