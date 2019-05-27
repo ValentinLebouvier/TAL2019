@@ -5,30 +5,73 @@ Created on Fri May 24 14:42:59 2019
 
 @author: valentinlebouvier
 """
-from tkinter import Tk,Canvas
+import threading
+from tkinter import Toplevel,Canvas,Frame,NW,Tk
+from PacManEngine import PacManEngine
 
-
-class PacManView(object):
+class PacManView(threading.Thread):
+    
+    CELL_SIZE = 30
         
     def __init__(self,engine):
+        threading.Thread.__init__(self)
         self.engine = engine
         
-        self.root = Tk()
-        self.root.title("PacMan")
-        self.root.resizable(True,True)
-        self.canvas = Canvas(self.root, background="black")
-        self.canvas.grid()
+        self.start()
+        
+
+    def stop(self):
+        self.root.quit()
         
     def update(self):
-        pass
+        for (x,y) in self.pills:
+            if not self.engine.maze.hasPill(x,y):
+                self.backgroundCanvas.delete(self.pills[(x,y)])
+        for c in self.pacmans:
+            (x,y)=self.engine.PacmanList[c].getCoordinates()
+            direction = self.engine.PacmanList[c].getDirection()
+            self.backgroundCanvas.delete(self.pacmans[c])
+            self.pacmans[c] = self.backgroundCanvas.create_arc(y*PacManView.CELL_SIZE+1,x*PacManView.CELL_SIZE+1,(y+1)*PacManView.CELL_SIZE-1,(x+1)*PacManView.CELL_SIZE-1,start=30,extent=300,fill="yellow")
+        for g in self.ghosts:
+            (x,y)=self.engine.GhostList[g].getCoordinates()
+            self.backgroundCanvas.delete(self.ghosts[g])
+            self.ghosts[g] = self.backgroundCanvas.create_arc(y*PacManView.CELL_SIZE+1,x*PacManView.CELL_SIZE+1,(y+1)*PacManView.CELL_SIZE-1,(x+1)*PacManView.CELL_SIZE+(PacManView.CELL_SIZE-2),start=0,extent=180,fill="pink")
+    
+    def run(self):
+        self.root = Tk()
+        self.root.title("PacMan")
+        self.root.resizable(False,False)
+        self.root.geometry(str(28*PacManView.CELL_SIZE)+"x"+str(31*PacManView.CELL_SIZE)+"+0+0")
+        self.mainFrame = Frame(self.root)
+        self.mainFrame.pack()
+        self.backgroundCanvas = Canvas(self.mainFrame,height=31*PacManView.CELL_SIZE,width=28*PacManView.CELL_SIZE,bg="black")
+        background = [[self.backgroundCanvas.create_rectangle(y*PacManView.CELL_SIZE,x*PacManView.CELL_SIZE,(y+1)*PacManView.CELL_SIZE,(x+1)*PacManView.CELL_SIZE,fill="white",outline="light grey") for y in range(self.engine.maze.width) if not self.engine.maze.isWall(x,y)] for x in range(self.engine.maze.height)]
+        self.pills = {}
+        for x in range(self.engine.maze.height):
+            for y in range(self.engine.maze.width):
+                if self.engine.maze.hasPill(x,y):
+                    self.pills[(x,y)]= self.backgroundCanvas.create_oval(y*PacManView.CELL_SIZE+(PacManView.CELL_SIZE//3),x*PacManView.CELL_SIZE+(PacManView.CELL_SIZE//3),(y+1)*PacManView.CELL_SIZE-(PacManView.CELL_SIZE//3),(x+1)*PacManView.CELL_SIZE-(PacManView.CELL_SIZE//3),fill="yellow")
+        self.pacmans = {}
+        for c in self.engine.PacmanList:
+            (x,y) = self.engine.PacmanList[c].getCoordinates()
+            print(x,y)
+            
+            self.pacmans[c] = self.backgroundCanvas.create_arc(y*PacManView.CELL_SIZE+1,x*PacManView.CELL_SIZE+1,(y+1)*PacManView.CELL_SIZE-1,(x+1)*PacManView.CELL_SIZE-1,start=30,extent=300,fill="yellow")
+        self.ghosts = {}
+        for g in self.engine.GhostList:
+            (x,y) = self.engine.GhostList[g].getCoordinates()
+            
+            self.ghosts[g] = self.backgroundCanvas.create_arc(y*PacManView.CELL_SIZE+1,x*PacManView.CELL_SIZE+1,(y+1)*PacManView.CELL_SIZE-1,(x+1)*PacManView.CELL_SIZE+(PacManView.CELL_SIZE-2),start=0,extent=180,fill="pink")
+            
+        self.backgroundCanvas.pack()
         
-        
-        
-    def start(self):
         self.root.mainloop()
+        
         
 
 if __name__ == "__main__":
+    engine = PacManEngine()
+    engine.stop()
     
-    view = PacManView()
+    view = PacManView(engine)
     view.start()

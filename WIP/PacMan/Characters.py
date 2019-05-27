@@ -5,20 +5,14 @@ Created on Wed May 15 08:53:47 2019
 
 @author: valentinlebouvier
 """
+from Maze import Maze
 
 class MovableCharacter(object):
     
     lastSeenCounter = 10
     
-    Directions = {
-            "West" : (0,-1),
-            "East" : (0,1),
-            "North" : (-1,0),
-            "South" : (1,0)
-                  }
-    
     def canGo(self,direction):
-        movement = MovableCharacter.Directions.get(direction)
+        movement = Maze.Directions[direction]
         return not self.maze.isWall(int(self.x+self.speed*movement[0])%self.maze.height,int(self.y+self.speed*movement[1])%self.maze.width)
     
     def canMove(self):
@@ -41,14 +35,17 @@ class MovableCharacter(object):
             self.lastSeen.pop(ls)
             
     def getCoordinates(self):
-        return (self.x,self.y)
+        return (int(self.x),int(self.y))
+    
+    def getDirection(self):
+        return Maze.ReverseDirections[(self.dx,self.dy)]
 
     def updateSeen(self, name, coord):
         self.lastSeen[name] = [coord,MovableCharacter.lastSeenCounter]
 
     def setDirection(self,direction):
         if not (direction is None):
-            movement = MovableCharacter.Directions.get(direction)
+            movement = Maze.Directions[direction]
             self.dx = movement[0]
             self.dy = movement[1]
         return True
@@ -86,9 +83,10 @@ class PacMan(MovableCharacter):
         self.hasPower = False
     
     def alone(self):
-        closest = self.maze.closestAmong(self.getCoordinates(),self.lastSeen)
-        dist = self.maze.distance(self.getCoordinates(),closest)
-        return dist>self.seuilCloseDistance
+#        closest = self.maze.closestAmong(self.getCoordinates(),self.lastSeen)
+#        dist = self.maze.distance(self.getCoordinates(),closest)
+#        return dist>self.seuilCloseDistance
+        return self.lastSeen=={}
     
     def gotoPill(self):
         coord1 = self.getCoordinates()

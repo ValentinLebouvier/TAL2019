@@ -12,9 +12,10 @@ from Maze import Maze
 from Characters import PacMan,Ghost
 
 
-class PacManEngine(object):
+class PacManEngine(threading.Thread):
     
     def __init__(self):
+        threading.Thread.__init__(self)
         self.maze = Maze()
         self.PacmanList = {}
         self.GhostList = {}
@@ -25,11 +26,10 @@ class PacManEngine(object):
         #self.GhostList["Blinky"] = Ghost(11,18,0.6,self.maze)
         #self.GhostList["Inky"] = Ghost(17,9,0.5,self.maze)
         #self.GhostList["Clyde"] = Ghost(17,18,0.4,self.maze)
-        self.gameSpeed = .5
+        self.gameSpeed = .05
         self.stop_thread = False
-        self.thread = threading.Thread(target=self.run, args=(lambda : self.stop_thread,))
-        self.thread.daemon = True                            # Daemonize thread
-        self.thread.start()                                  # Start the execution
+        
+        self.start()
     
     def displayText(self):
         disp = self.maze.displayText()
@@ -41,12 +41,24 @@ class PacManEngine(object):
             for y in range(self.maze.width):
                 print(disp[x][y],sep='',end='')
             print()
-
+            
+    def hasGhost(self,x,y):
+        for g in self.GhostList:
+            if (x,y)==g.getCoordinates():
+                return True
+        return False
+    
     def hasLost(self):
         for c in self.PacmanList.values():
             for g in self.GhostList.values():
                 if int(c.x)==int(g.x) and int(c.y)==int(g.y) and not c.hasPower:
                     return True
+        return False
+    
+    def hasPacMan(self,x,y):
+        for c in self.PacmanList:
+            if (x,y)==c.getCoordinates():
+                return True
         return False
     
     def hasWon(self):
@@ -55,8 +67,8 @@ class PacManEngine(object):
     def noMorePills(self):
         return self.maze.hasNoPill()
 
-    def run(self,stop):
-        
+    def run(self):
+        time.sleep(1)
         while (True):
             self.updateSeen()
             
@@ -68,14 +80,18 @@ class PacManEngine(object):
                 g.move()
             if self.hasLost():
                 break
-            self.displayText()
+            #self.displayText()
+            self.view.update()
             
             time.sleep(self.gameSpeed)
-            if (stop()):
+            if (self.stop_thread):
                 break
-            
+    
     def stop(self):
         self.stop_thread = True
+    
+    def setView(self,view):
+        self.view = view
             
     def updateSeen(self):
         for g in self.GhostList.values():

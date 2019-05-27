@@ -139,7 +139,9 @@ class Maze(object):
         return res
     
     def distance(self,coordStart,coordEnd):
-        return nx.shortest_path_length(self.graph,coordStart,coordEnd)
+        res = nx.shortest_path_length(self.graph,coordStart,coordEnd)
+        print("res",res)
+        return res
     
     def direction(self, coordStart, coordEnd):
         nextCoord = nx.shortest_path(self.graph,coordStart,coordEnd)[1]
@@ -154,7 +156,7 @@ class Maze(object):
         return self.nbOfPills==0
 
     def hasPill(self,x,y):
-        return self.maze[x%self.height][y%self.width]==Maze.Pill
+        return self.maze[int(x%self.height)][int(y%self.width)]==Maze.Pill
 
     def isNextTo(self,coord1,coord2):
         return ( 
@@ -168,7 +170,7 @@ class Maze(object):
     
     def takePill(self,x,y):
         if self.hasPill(x,y):
-            self.maze[x][y]=Maze.Empty
+            self.maze[int(x)][int(y)]=Maze.Empty
             self.nbOfPills-=1
             return True
         return False

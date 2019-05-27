@@ -7,6 +7,7 @@ Created on Wed May 15 10:56:01 2019
 """
 
 from PacManEngine import PacManEngine
+from PacManView import PacManView
 from random import random
 import py_trees
 import time
@@ -244,6 +245,9 @@ if __name__ == "__main__":
     
     for i in range(1):
         engine = PacManEngine()
+        view = PacManView(engine)
+        
+        engine.setView(view)
         
         perdu = Condition("perdu")
         perdu.setCondition(engine.hasLost)
@@ -275,7 +279,7 @@ if __name__ == "__main__":
         bt.setup(timeout=15)
         try:
             bt.tick_tock(
-                500,
+                50,
                 py_trees.trees.CONTINUOUS_TICK_TOCK,
                 None,
                 None
@@ -284,6 +288,7 @@ if __name__ == "__main__":
             bt.interrupt()
         
         engine.stop()
+        view.stop()
     
     for v in blackboard.times:
         if len(blackboard.times[v])!=0:
