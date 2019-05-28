@@ -7,6 +7,7 @@ Created on Tue May 14 15:57:06 2019
 """
 
 import networkx as nx
+from toolkit import mazeTileset
 
 class Maze(object):
     
@@ -122,25 +123,25 @@ class Maze(object):
         edges = [(coord1,coord2) for coord1 in sommets for coord2 in sommets if self.isNextTo(coord1,coord2)]
         self.graph.add_edges_from(edges)
     
-    def display(self):
-        tileset = [".","o","▓"]
+    def __repr__(self):
+        m = self.getTextMatrix()
+        res = ""
         for x in range(self.height):
             for y in range(self.width):
-                print(tileset[self.maze[x][y]], sep='', end=' ')
-            print()
+                res+=m[x][y]
+            res+="\n"
+        return res
     
     
-    def displayText(self):
+    def getTextMatrix(self):
         res = [["" for y in range(self.width)] for x in range(self.height)]
-        tileset = [".","o","▓"]
         for x in range(self.height):
             for y in range(self.width):
-                res[x][y] = tileset[self.maze[x][y]]
+                res[x][y] = mazeTileset[self.maze[x][y]]
         return res
     
     def distance(self,coordStart,coordEnd):
         res = nx.shortest_path_length(self.graph,coordStart,coordEnd)
-        print("res",res)
         return res
     
     def direction(self, coordStart, coordEnd):

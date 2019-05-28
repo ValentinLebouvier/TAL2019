@@ -83,10 +83,10 @@ class PacMan(MovableCharacter):
         self.hasPower = False
     
     def alone(self):
-#        closest = self.maze.closestAmong(self.getCoordinates(),self.lastSeen)
-#        dist = self.maze.distance(self.getCoordinates(),closest)
-#        return dist>self.seuilCloseDistance
-        return self.lastSeen=={}
+        closest = self.maze.closestAmong(self.getCoordinates(),self.lastSeen)
+        dist = self.maze.distance(self.getCoordinates(),closest)
+        res = dist>self.seuilCloseDistance
+        return res
     
     def gotoPill(self):
         coord1 = self.getCoordinates()

@@ -13,15 +13,21 @@ class PacManView(threading.Thread):
     
     CELL_SIZE = 30
         
-    def __init__(self,engine):
+    def __init__(self,engine, controller):
         threading.Thread.__init__(self)
+        self.controller = controller
         self.engine = engine
+        self.engine.setView(self)
+        
         
         self.start()
         
-
+    def close(self):
+        self.root.destroy()
+        self.controller.stop()
+        
     def stop(self):
-        self.root.quit()
+        self.root.destroy()
         
     def update(self):
         for (x,y) in self.pills:
@@ -31,7 +37,14 @@ class PacManView(threading.Thread):
             (x,y)=self.engine.PacmanList[c].getCoordinates()
             direction = self.engine.PacmanList[c].getDirection()
             self.backgroundCanvas.delete(self.pacmans[c])
-            self.pacmans[c] = self.backgroundCanvas.create_arc(y*PacManView.CELL_SIZE+1,x*PacManView.CELL_SIZE+1,(y+1)*PacManView.CELL_SIZE-1,(x+1)*PacManView.CELL_SIZE-1,start=30,extent=300,fill="yellow")
+            if direction=="East":
+                self.pacmans[c] = self.backgroundCanvas.create_arc(y*PacManView.CELL_SIZE+1,x*PacManView.CELL_SIZE+1,(y+1)*PacManView.CELL_SIZE-1,(x+1)*PacManView.CELL_SIZE-1,start=30,extent=300,fill="yellow")
+            elif direction=="West":
+                self.pacmans[c] = self.backgroundCanvas.create_arc(y*PacManView.CELL_SIZE+1,x*PacManView.CELL_SIZE+1,(y+1)*PacManView.CELL_SIZE-1,(x+1)*PacManView.CELL_SIZE-1,start=210,extent=300,fill="yellow")
+            elif direction=="North":
+                self.pacmans[c] = self.backgroundCanvas.create_arc(y*PacManView.CELL_SIZE+1,x*PacManView.CELL_SIZE+1,(y+1)*PacManView.CELL_SIZE-1,(x+1)*PacManView.CELL_SIZE-1,start=120,extent=300,fill="yellow")
+            elif direction=="South":
+                self.pacmans[c] = self.backgroundCanvas.create_arc(y*PacManView.CELL_SIZE+1,x*PacManView.CELL_SIZE+1,(y+1)*PacManView.CELL_SIZE-1,(x+1)*PacManView.CELL_SIZE-1,start=300,extent=300,fill="yellow")
         for g in self.ghosts:
             (x,y)=self.engine.GhostList[g].getCoordinates()
             self.backgroundCanvas.delete(self.ghosts[g])
@@ -42,6 +55,9 @@ class PacManView(threading.Thread):
         self.root.title("PacMan")
         self.root.resizable(False,False)
         self.root.geometry(str(28*PacManView.CELL_SIZE)+"x"+str(31*PacManView.CELL_SIZE)+"+0+0")
+        
+        self.root.protocol("WM_DELETE_WINDOW",self.close)
+        
         self.mainFrame = Frame(self.root)
         self.mainFrame.pack()
         self.backgroundCanvas = Canvas(self.mainFrame,height=31*PacManView.CELL_SIZE,width=28*PacManView.CELL_SIZE,bg="black")
@@ -54,7 +70,6 @@ class PacManView(threading.Thread):
         self.pacmans = {}
         for c in self.engine.PacmanList:
             (x,y) = self.engine.PacmanList[c].getCoordinates()
-            print(x,y)
             
             self.pacmans[c] = self.backgroundCanvas.create_arc(y*PacManView.CELL_SIZE+1,x*PacManView.CELL_SIZE+1,(y+1)*PacManView.CELL_SIZE-1,(x+1)*PacManView.CELL_SIZE-1,start=30,extent=300,fill="yellow")
         self.ghosts = {}

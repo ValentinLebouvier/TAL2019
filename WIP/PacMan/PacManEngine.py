@@ -14,33 +14,28 @@ from Characters import PacMan,Ghost
 
 class PacManEngine(threading.Thread):
     
-    def __init__(self):
+    def __init__(self,nbPacmans,nbGhosts):
         threading.Thread.__init__(self)
         self.maze = Maze()
         self.PacmanList = {}
         self.GhostList = {}
-        self.PacmanList["Pacman"] = PacMan(1.5,1.5,1,self.maze)
-        #self.PacmanList["MsPacman"] = PacMan(1,26,0.9,self.maze)
-        #self.PacmanList["JrPacman"] = PacMan(29,14,0.8,self.maze)
-        self.GhostList["Pinky"] = Ghost(11.5,9.5,1,self.maze)
-        #self.GhostList["Blinky"] = Ghost(11,18,0.6,self.maze)
-        #self.GhostList["Inky"] = Ghost(17,9,0.5,self.maze)
-        #self.GhostList["Clyde"] = Ghost(17,18,0.4,self.maze)
-        self.gameSpeed = .05
+        for idP in range(nbPacmans):
+            self.PacmanList["Pacman"+str(idP)] = PacMan(1.5,1.5,1,self.maze)
+        for idG in range(nbGhosts):
+            self.GhostList["Ghost"+str(idG)] = Ghost(11.5,9.5,1,self.maze)
+        self.gameSpeed = .5
         self.stop_thread = False
+        self.updateSeen()
         
         self.start()
     
-    def displayText(self):
-        disp = self.maze.displayText()
+    def __repr__(self):
+        disp = self.maze.getTextMatrix()
         for c in self.PacmanList.values():
-            disp[int(c.x)][int(c.y)] = "☺"
+            disp[int(c.x)][int(c.y)] = "P"
         for g in self.GhostList.values():
-            disp[int(g.x)][int(g.y)] = "X"
-        for x in range(self.maze.height):
-            for y in range(self.maze.width):
-                print(disp[x][y],sep='',end='')
-            print()
+            disp[int(g.x)][int(g.y)] = "G"
+        return disp
             
     def hasGhost(self,x,y):
         for g in self.GhostList:
@@ -76,14 +71,16 @@ class PacManEngine(threading.Thread):
                 c.move()
             if self.hasLost():
                 break
+            
             for g in self.GhostList.values():
                 g.move()
             if self.hasLost():
                 break
-            #self.displayText()
+            
             self.view.update()
             
             time.sleep(self.gameSpeed)
+            
             if (self.stop_thread):
                 break
     
