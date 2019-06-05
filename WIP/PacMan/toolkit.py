@@ -12,7 +12,7 @@ from random import random
 
 class Action(py_trees.behaviour.Behaviour):
     
-    def setAction(self,fonction,argument=None):
+    def setAction(self,fonction,argument="No Argument"):
         self.action = fonction
         self.argument = argument
     
@@ -20,7 +20,7 @@ class Action(py_trees.behaviour.Behaviour):
         blackboard = py_trees.blackboard.Blackboard()
         status = py_trees.common.Status.RUNNING
         tStart = time.time()
-        if self.argument is None:
+        if self.argument=="No Argument":
             res = self.action()
         else:
             res = self.action(self.argument)
@@ -52,6 +52,12 @@ class Condition(py_trees.behaviour.Behaviour):
             return py_trees.common.Status.SUCCESS
         else:
             return py_trees.common.Status.FAILURE
+
+
+def addNoSuccessOverflow(bt):
+    decorateurCondition = py_trees.decorators.Condition(bt,"",py_trees.common.Status.FAILURE)
+    decorateurInversion = py_trees.decorators.Inverter(decorateurCondition,"")        
+    return decorateurInversion
 
 def createGameBTHeader(engine):
     perdu = Condition("Gagné")
@@ -216,18 +222,40 @@ def createPillSeeking(engine, character):
 
     selector = py_trees.composites.Selector("?")
     
-    alone = Condition("Alone")
-    alone.setCondition(c.alone)
-    
+#    isNotAlone = Condition("Not Alone")
+#    isNotAlone.setCondition(lambda :not(c.isAlone()))
     gotoPill = Action("Goto Pill")
     gotoPill.setAction(c.gotoPill)
+    guard = py_trees.decorators.EternalGuard(child=gotoPill,condition=c.isAlone)
     
-    sequence = py_trees.composites.Sequence("→",[alone,gotoPill])
-    notAlone = py_trees.behaviour.Behaviour("NotSupposedToStay")
+    notAlone = createEquiprobable(engine,character)
     
-    selector.add_children([sequence,notAlone])
+#    selector2 = py_trees.composites.Selector("?",[isNotAlone,gotoPill])
     
-    return selector, notAlone
+    selector.add_children([guard,notAlone])
+    
+    return selector
+
+def createPacmanChase(engine, character):
+    c = engine.GhostList.get(character)
+
+    selector = py_trees.composites.Selector("?")
+    
+    isNotAlone = Condition("Not Alone")
+    isNotAlone.setCondition(lambda :not(c.isAlone()))
+    
+    gotoPacman = Action("Goto Pacman")
+    gotoPacman.setAction(c.chase)
+    
+    alone = Action("Stop Ghost")
+    alone.setAction(c.setDirection,None)
+    blocker = py_trees.decorators.Condition(alone,status=py_trees.common.Status.FAILURE)
+    
+    sequence = py_trees.composites.Sequence("→",[isNotAlone,gotoPacman])
+
+    selector.add_children([sequence, blocker])
+    
+    return selector
 
 def choose_1st_over(n):
     return random()<(1/n)

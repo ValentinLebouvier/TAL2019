@@ -18,21 +18,29 @@ class PacManView(threading.Thread):
         self.controller = controller
         self.engine = engine
         self.engine.setView(self)
-        
+        self.isToStop = False
         
         self.start()
         
     def close(self):
-        self.root.destroy()
         self.controller.stop()
+    
+    def closeUpdate(self):
+        print(self.isToStop)
+        if self.isToStop:
+            self.root.destroy()
+        self.root.after(1000,self.closeUpdate)
         
     def stop(self):
-        self.root.destroy()
+        print("pre_rootDestroy")
+        self.isToStop = True
+        print("post_rootDestroy")
         
     def update(self):
         for (x,y) in self.pills:
             if not self.engine.maze.hasPill(x,y):
-                self.backgroundCanvas.delete(self.pills[(x,y)])
+                p = self.pills[(x,y)]
+                self.backgroundCanvas.delete(p)
         for c in self.pacmans:
             (x,y)=self.engine.PacmanList[c].getCoordinates()
             direction = self.engine.PacmanList[c].getDirection()
@@ -56,6 +64,7 @@ class PacManView(threading.Thread):
         self.root.resizable(False,False)
         self.root.geometry(str(28*PacManView.CELL_SIZE)+"x"+str(31*PacManView.CELL_SIZE)+"+0+0")
         
+        self.root.after(1000,self.closeUpdate)
         self.root.protocol("WM_DELETE_WINDOW",self.close)
         
         self.mainFrame = Frame(self.root)
@@ -81,6 +90,7 @@ class PacManView(threading.Thread):
         self.backgroundCanvas.pack()
         
         self.root.mainloop()
+        print("exit view")
         
         
 

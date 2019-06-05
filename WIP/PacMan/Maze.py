@@ -19,6 +19,7 @@ class Maze(object):
     Empty = 0
     
     Directions = {
+            None : (0,0),
             "West" : (0,-1),
             "East" : (0,1),
             "North" : (-1,0),
@@ -88,12 +89,16 @@ class Maze(object):
         
     def canSee(self, coordStart, coordEnd):
         if coordStart[0]==coordEnd[0]:
-            for y in range(coordStart[1],coordEnd[1]):
+            start = min(coordStart[1],coordEnd[1])
+            end = max(coordStart[1],coordEnd[1])
+            for y in range(start,end):
                 if self.isWall(coordStart[0],y):
                     return False
             return True
         elif coordStart[1]==coordEnd[1]:
-            for x in range(coordStart[0],coordEnd[0]):
+            start = min(coordStart[0],coordEnd[0])
+            end = max(coordStart[0],coordEnd[0])
+            for x in range(start,end):
                 if self.isWall(x, coordStart[1]):
                     return False
             return True
@@ -108,7 +113,7 @@ class Maze(object):
             if dist<closestDist:
                 closest = coord
                 closestDist = dist
-        return closest
+        return closest,closestDist
 
     def closestPill(self, coord):
         for coord2,succ in nx.bfs_successors(self.graph,coord):
@@ -145,7 +150,10 @@ class Maze(object):
         return res
     
     def direction(self, coordStart, coordEnd):
-        nextCoord = nx.shortest_path(self.graph,coordStart,coordEnd)[1]
+        path = nx.shortest_path(self.graph,coordStart,coordEnd)
+        if len(path)<2:
+            return None
+        nextCoord = path[1]
         firstStep = (nextCoord[0]-coordStart[0],nextCoord[1]-coordStart[1])
         if abs(firstStep[0])==self.height-1:
             firstStep = (-firstStep[0]//(self.height-1),firstStep[1])

@@ -18,10 +18,12 @@ class MovableCharacter(object):
     def canMove(self):
         return not self.maze.isWall(int(self.x+self.speed*self.dx)%self.maze.height,int(self.y+self.speed*self.dy)%self.maze.width)
     
-    def chase(self, character):
-        if not(self.lastSeen.contains(character)):
+    def chase(self):
+        if list(self.lastSeen) == []:
             return False
-        coord = self.lastSeen[character][0]
+        if self.chasing == None or not(self.chasing in list(self.lastSeen.keys())):
+            self.chasing = list(self.lastSeen.keys())[0]
+        coord = self.lastSeen[self.chasing][0]
         direction = self.maze.direction(self.getCoordinates(),coord)
         self.setDirection(direction)
     
@@ -44,6 +46,7 @@ class MovableCharacter(object):
         self.lastSeen[name] = [coord,MovableCharacter.lastSeenCounter]
 
     def setDirection(self,direction):
+        print("Set direction",direction)
         if not (direction is None):
             movement = Maze.Directions[direction]
             self.dx = movement[0]
@@ -82,10 +85,10 @@ class PacMan(MovableCharacter):
         if (self.maze.takePill(self.x,self.y)) : self.eatenPills+=1
         self.hasPower = False
     
-    def alone(self):
-        closest = self.maze.closestAmong(self.getCoordinates(),self.lastSeen)
-        dist = self.maze.distance(self.getCoordinates(),closest)
+    def isAlone(self):
+        closest,dist = self.maze.closestAmong(self.getCoordinates(),self.lastSeen)
         res = dist>self.seuilCloseDistance
+        print("isAlone",res)
         return res
     
     def gotoPill(self):
@@ -95,7 +98,7 @@ class PacMan(MovableCharacter):
             return False
         direction = self.maze.direction(coord1,coord2)
         self.setDirection(direction)
-        return None
+        return True
 
     def move(self):
         if self.canMove():
@@ -119,7 +122,7 @@ class Ghost(MovableCharacter):
         self.chasing = None
         self.isEaten = False
     
-    def alone(self):
+    def isAlone(self):
         return list(self.lastSeen.keys())==[]
     
     def move(self):

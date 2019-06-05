@@ -14,16 +14,16 @@ from Characters import PacMan,Ghost
 
 class PacManEngine(threading.Thread):
     
-    def __init__(self,nbPacmans,nbGhosts):
+    def __init__(self,nbPacmans,nbGhosts,speed):
         threading.Thread.__init__(self)
         self.maze = Maze()
         self.PacmanList = {}
         self.GhostList = {}
         for idP in range(nbPacmans):
-            self.PacmanList["Pacman"+str(idP)] = PacMan(1.5,1.5,1,self.maze)
+            self.PacmanList["Pacman"+str(idP)] = PacMan(1.5,1.5,1,self.maze,"Pacman"+str(idP))
         for idG in range(nbGhosts):
-            self.GhostList["Ghost"+str(idG)] = Ghost(11.5,9.5,1,self.maze)
-        self.gameSpeed = .5
+            self.GhostList["Ghost"+str(idG)] = Ghost(11.5,9.5,1,self.maze,"Ghost"+str(idG))
+        self.gameSpeed = speed
         self.stop_thread = False
         self.updateSeen()
         
@@ -66,23 +66,18 @@ class PacManEngine(threading.Thread):
         time.sleep(1)
         while (True):
             self.updateSeen()
-            
             for c in self.PacmanList.values():
                 c.move()
             if self.hasLost():
                 break
-            
             for g in self.GhostList.values():
                 g.move()
             if self.hasLost():
                 break
-            
-            self.view.update()
-            
-            time.sleep(self.gameSpeed)
-            
             if (self.stop_thread):
                 break
+            self.view.update()
+            time.sleep(self.gameSpeed)
     
     def stop(self):
         self.stop_thread = True
