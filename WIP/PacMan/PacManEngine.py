@@ -22,7 +22,7 @@ class PacManEngine(threading.Thread):
         for idP in range(nbPacmans):
             self.PacmanList["Pacman"+str(idP)] = PacMan(1.5,1.5,1,self.maze,"Pacman"+str(idP))
         for idG in range(nbGhosts):
-            self.GhostList["Ghost"+str(idG)] = Ghost(11.5,9.5,1,self.maze,"Ghost"+str(idG))
+            self.GhostList["Ghost"+str(idG)] = Ghost(11.5,9.5,0.9,self.maze,"Ghost"+str(idG))
         self.gameSpeed = speed
         self.stop_thread = False
         self.updateSeen()

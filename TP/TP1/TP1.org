@@ -1,0 +1,25 @@
+#+OPTIONS: texht:t
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS:
+#+LATEX_HEADER:
+#+LATEX_HEADER_EXTRA:
+#+TITLE: TP1 : Graphes et Behaviour Trees
+#+AUTHOR: Valentin LEBOUVIER
+
+* Rappels sur les graphes:
+Rappels sur les graphes: (non-)orientés, (a)cycliques
+
+Parcours largeur, hauteur ...
+
+
+* Graphes simples:
+Noeuds (init(name), addChild, addChildren, parcoursLargeur, parcourProfondeur)
+
+Avec affichage du nom du noeud
+
+* Behaviour trees:
+Présentation BT orienté IA/ jeux vidéo
+Présentation des différents types de noeuds & fonctionnement global
+
+Construction example simple
+

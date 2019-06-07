@@ -1,0 +1,56 @@
+% Created 2019-06-07 ven. 11:12
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\tolerance=1000
+\usepackage[frenchb]{babel}
+\author{Valentin LEBOUVIER}
+\date{\today}
+\title{TP1 : Graphes et Behaviour Trees}
+\hypersetup{
+  pdfkeywords={},
+  pdfsubject={},
+  pdfcreator={Emacs 25.2.2 (Org mode 8.2.10)}}
+\begin{document}
+
+\maketitle
+
+
+\section{Présentation Tkinter}
+\label{sec-1}
+Tkinter est un outil de représentation graphique facile a prendre en main et disponible dans la librairie standard Python.
+Application (Tk)
+Widgets(Button,Canvas)
+
+
+\section{Ma première fenêtre}
+\label{sec-2}
+Pour créer votre première fenêtre, il vous suffit d'importer tkinter avec la commande:
+
+\begin{verbatim}
+import tkinter as tk
+\end{verbatim}
+
+Il vous suffit alors de créer une nouvelle application en créant un objet de type \verb~tk.Tk~ et de le lancer avec la méthode \verb~.mainloop()~. /!$\backslash$ Prenez bien note de lancer la \verb~.mainloop~ en dernier, car il est blockant.
+
+\noindent
+Vous pouvez ensuite commencer a modifier les paramètres de la fenêtre:
+\begin{itemize}
+\item \verb~.title(str)~ : Change le titre de la fenêtre
+\item \verb~.geometry(str)~ : Change la taille de la fenêtre et son emplacement sur l'écran
+\end{itemize}
+% Emacs 25.2.2 (Org mode 8.2.10)
+\end{document}

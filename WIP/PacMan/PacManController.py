@@ -55,16 +55,12 @@ class PacManController(object):
 
     
     def stop(self):
-        print("pre_interrupt")
         self.bt.interrupt()
-        print("pre_engineStop")
         self.engine.stop()
-        print("pre_viewStop")
         self.view.stop()
-        print("post_viewStop")
         
 
 if __name__=="__main__":
     
-    controller = PacManController()
+    controller = PacManController(speed=0.05)
     controller.start()

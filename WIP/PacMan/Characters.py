@@ -46,7 +46,6 @@ class MovableCharacter(object):
         self.lastSeen[name] = [coord,MovableCharacter.lastSeenCounter]
 
     def setDirection(self,direction):
-        print("Set direction",direction)
         if not (direction is None):
             movement = Maze.Directions[direction]
             self.dx = movement[0]
@@ -88,7 +87,6 @@ class PacMan(MovableCharacter):
     def isAlone(self):
         closest,dist = self.maze.closestAmong(self.getCoordinates(),self.lastSeen)
         res = dist>self.seuilCloseDistance
-        print("isAlone",res)
         return res
     
     def gotoPill(self):

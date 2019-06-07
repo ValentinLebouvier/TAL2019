@@ -1,0 +1,32 @@
+B
+#OB+OPTIONS: texht:t toc:nil
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS:
+#+LATEX_HEADER: \usepackage[frenchb]{babel}
+#+LATEX_HEADER_EXTRA:
+#+LANGUAGE: fr
+#+TITLE: TP1 : Graphes et Behaviour Trees
+#+AUTHOR: Valentin LEBOUVIER
+
+
+* Présentation Tkinter
+Tkinter est un outil de représentation graphique facile a prendre en main et disponible dans la librairie standard Python.
+Application (Tk)
+Widgets(Button,Canvas)
+
+
+* Ma première fenêtre
+Pour créer votre première fenêtre, il vous suffit d'importer tkinter avec la commande:
+
+#+BEGIN_SRC python
+import tkinter as tk
+#+END_SRC
+
+Il vous suffit alors de créer une nouvelle application en créant un objet de type ~tk.Tk~ et de le lancer avec la méthode ~.mainloop()~. /!\ Prenez bien note de lancer la ~.mainloop~ en dernier, car il est blockant.
+
+#+LATEX: \noindent
+Vous pouvez ensuite commencer a modifier les paramètres de la fenêtre:
+- ~.title(str)~ : Change le titre de la fenêtre
+- ~.geometry(str)~ : Change la taille de la fenêtre et son emplacement sur l'écran
+
+

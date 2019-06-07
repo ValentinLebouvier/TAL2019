@@ -26,15 +26,12 @@ class PacManView(threading.Thread):
         self.controller.stop()
     
     def closeUpdate(self):
-        print(self.isToStop)
         if self.isToStop:
             self.root.destroy()
         self.root.after(1000,self.closeUpdate)
         
     def stop(self):
-        print("pre_rootDestroy")
         self.isToStop = True
-        print("post_rootDestroy")
         
     def update(self):
         for (x,y) in self.pills:
@@ -90,7 +87,6 @@ class PacManView(threading.Thread):
         self.backgroundCanvas.pack()
         
         self.root.mainloop()
-        print("exit view")
         
         
 
