@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue May 28 14:29:30 2019
+Created on Wed May 15 10:56:01 2019
 
 @author: valentinlebouvier
 """
 
-import py_trees, time
+from PacManEngine import PacManEngine
+from PacManView import PacManView
 from random import random
-
+import py_trees
+import time
 
 class Action(py_trees.behaviour.Behaviour):
     
-    def setAction(self,fonction,argument="No Argument"):
+    def setAction(self,fonction,argument=None):
         self.action = fonction
         self.argument = argument
     
@@ -20,7 +22,7 @@ class Action(py_trees.behaviour.Behaviour):
         blackboard = py_trees.blackboard.Blackboard()
         status = py_trees.common.Status.RUNNING
         tStart = time.time()
-        if self.argument=="No Argument":
+        if self.argument is None:
             res = self.action()
         else:
             res = self.action(self.argument)
@@ -54,40 +56,21 @@ class Condition(py_trees.behaviour.Behaviour):
             return py_trees.common.Status.FAILURE
 
 
-def addNoSuccessOverflow(bt):
-    decorateurCondition = py_trees.decorators.Condition(bt,"",py_trees.common.Status.FAILURE)
-    decorateurInversion = py_trees.decorators.Inverter(decorateurCondition,"")        
-    return decorateurInversion
+def random1_4():
+    rng = random()
+    return rng<.25
 
-def createGameBTHeader(model):
-    perdu = Condition("Gagné")
-    perdu.setCondition(model.hasLost)
-    
-    gagne = Condition("Perdu")
-    gagne.setCondition(model.hasWon)
-    
-    
-    sequence = py_trees.composites.Sequence("→")
-    bt = py_trees.trees.BehaviourTree(sequence)
+def random1_3():
+    return random()<.33
 
+def random1_2():
+    return random()<.5
 
-    endOfGame = Action("EOG")
-    endOfGame.setAction(endGame,(model,bt))
-    
-    parallel= py_trees.composites.Parallel("⇉",py_trees.common.ParallelPolicy.SuccessOnOne())
-    
-    selector = py_trees.composites.Selector("?",[gagne,perdu,parallel])
-    
-    sequence.add_children([selector,endOfGame])
-    
-    return bt, parallel
-
-
-def createEquiprobable(model,character):
-    if character in model.PacmanList.keys():
-        c = model.PacmanList.get(character)
+def createEquiprobableBT(engine,character):
+    if character in engine.PacmanList.keys():
+        c = engine.PacmanList.get(character)
     else:
-        c = model.GhostList.get(character)
+        c = engine.GhostList.get(character)
     
     goWest = Action("Move West")
     goWest.setAction(c.setDirection,"West")
@@ -115,13 +98,13 @@ def createEquiprobable(model,character):
    
     
     random4 = Condition("Random 1/4")
-    random4.setCondition(choose_1st_over,4)
+    random4.setCondition(random1_4)
     
     random3 = Condition("Random 1/3")
-    random3.setCondition(choose_1st_over,3)
+    random3.setCondition(random1_3)
     
     random2 = Condition("Random 1/2")
-    random2.setCondition(choose_1st_over,2)
+    random2.setCondition(random1_2)
     
     
     sequenceW4 = py_trees.composites.Sequence("→",[random4,goWest])
@@ -215,57 +198,97 @@ def createEquiprobable(model,character):
     decorateurCondition = py_trees.decorators.Condition(selector11,"",py_trees.common.Status.FAILURE)
     decorateurInversion = py_trees.decorators.Inverter(decorateurCondition,"")
     
-    return decorateurInversion
+    bt = py_trees.trees.BehaviourTree(decorateurInversion)
+    
+    return bt
 
-def createPillSeeking(model, character):
-    c = model.PacmanList.get(character)
-
+def createPillSeekingBT(engine,character):
+    
+    c = engine.PacmanList.get(character)
+    
     selector = py_trees.composites.Selector("?")
     
-#    isNotAlone = Condition("Not Alone")
-#    isNotAlone.setCondition(lambda :not(c.isAlone()))
+    alone = Condition("Alone")
+    alone.setCondition(c.alone)
+    
     gotoPill = Action("Goto Pill")
     gotoPill.setAction(c.gotoPill)
-    guard = py_trees.decorators.EternalGuard(child=gotoPill,condition=c.isAlone)
     
-    notAlone = createEquiprobable(model,character)
+    sequence = py_trees.composites.Sequence("→",[alone,gotoPill])
+    random = createEquiprobableBT(engine,character).root
     
-#    selector2 = py_trees.composites.Selector("?",[isNotAlone,gotoPill])
+    selector.add_children([sequence,random])
     
-    selector.add_children([guard,notAlone])
+    bt = py_trees.trees.BehaviourTree(selector)
     
-    return selector
+    return bt
 
-def createPacmanChase(model, character):
-    c = model.GhostList.get(character)
 
-    selector = py_trees.composites.Selector("?")
-    
-    isNotAlone = Condition("Not Alone")
-    isNotAlone.setCondition(lambda :not(c.isAlone()))
-    
-    gotoPacman = Action("Goto Pacman")
-    gotoPacman.setAction(c.chase)
-    
-    alone = Action("Stop Ghost")
-    alone.setAction(c.setDirection,None)
-    blocker = py_trees.decorators.Condition(alone,status=py_trees.common.Status.FAILURE)
-    
-    sequence = py_trees.composites.Sequence("→",[isNotAlone,gotoPacman])
-
-    selector.add_children([sequence, blocker])
-    
-    return selector
-
-def choose_1st_over(n):
-    return random()<(1/n)
 
 def endGame(args):
+    
     print("END OF GAME")
     args[1].interrupt()
     if (args[0].hasWon()):
         print("Pacman a gagné")
     else:
         print("Pacman a perdu")
+    
 
-mazeTileset = [".","o","▓"]
+
+if __name__ == "__main__":
+    
+    blackboard = py_trees.blackboard.Blackboard()
+    blackboard.times = {}
+    for v in ["Alone","perdu","Gagné","Goto Pill","Random 1/2","Random 1/3","Random 1/4","No West Wall","No East Wall","No North Wall","No South Wall","Move West","Move East","Move South","Move North","EOG"]:
+        blackboard.times[v] = []
+    
+    engine = PacManEngine()
+    view = PacManView(engine)
+    
+    perdu = Condition("perdu")
+    perdu.setCondition(engine.hasLost)
+    
+    gagne = Condition("Gagné")
+    gagne.setCondition(engine.hasWon)
+    
+    btPacman = createPillSeekingBT(engine,"Pacman")
+    #btMsPacman = createEquiprobableBT(engine,"MsPacman")
+    #btJrPacman = createEquiprobableBT(engine,"JrPacman")
+    btPinky = createEquiprobableBT(engine,"Pinky")
+    #btBlinky = createEquiprobableBT(engine,"Blinky")
+    #btInky = createEquiprobableBT(engine,"Inky")
+    #btClyde = createEquiprobableBT(engine,"Clyde")
+    
+    sequence = py_trees.composites.Sequence("→")
+    
+    bt = py_trees.trees.BehaviourTree(sequence)
+    
+    parallel = py_trees.composites.Parallel("⇉",py_trees.common.ParallelPolicy.SuccessOnOne(),[btPacman.root,btPinky.root])#,btMsPacman.root,btJrPacman.root,btPinky.root,btBlinky.root,btInky.root,btClyde.root])
+    
+    selector = py_trees.composites.Selector("?",[gagne,perdu,parallel])
+    
+    endOfGame = Action("EOG")
+    endOfGame.setAction(endGame,(engine,bt))
+    
+    sequence.add_children([selector,endOfGame])
+    
+#    py_trees.display.render_dot_tree(bt.root)
+    bt.setup(timeout=15)
+    try:
+        bt.tick_tock(
+            500,
+            py_trees.trees.CONTINUOUS_TICK_TOCK,
+            None,
+            lambda x : print("tic",x.root.tip().name)
+        )
+    except KeyboardInterrupt:
+        bt.interrupt()
+    
+    engine.stop()
+    view.stop()
+    
+    for v in blackboard.times:
+        if len(blackboard.times[v])!=0:
+            print(v,sum(blackboard.times[v])/len(blackboard.times[v]))
+    

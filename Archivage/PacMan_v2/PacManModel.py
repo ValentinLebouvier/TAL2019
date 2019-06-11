@@ -12,13 +12,14 @@ from Maze import Maze
 from Characters import PacMan,Ghost
 
 
-class PacManEngine(threading.Thread):
+class PacManModel(threading.Thread):
     
     def __init__(self,nbPacmans,nbGhosts,speed):
         threading.Thread.__init__(self)
         self.maze = Maze()
         self.PacmanList = {}
         self.GhostList = {}
+        self.subscribers = []
         for idP in range(nbPacmans):
             self.PacmanList["Pacman"+str(idP)] = PacMan(1.5,1.5,1,self.maze,"Pacman"+str(idP))
         for idG in range(nbGhosts):
@@ -76,14 +77,15 @@ class PacManEngine(threading.Thread):
                 break
             if (self.stop_thread):
                 break
-            self.view.update()
+            for v in self.subscribers:
+                v.update()
             time.sleep(self.gameSpeed)
     
     def stop(self):
         self.stop_thread = True
     
-    def setView(self,view):
-        self.view = view
+    def subscribe(self,subs):
+        self.subscribers.append(subs)
             
     def updateSeen(self):
         for g in self.GhostList.values():

@@ -4,28 +4,59 @@
 #+LATEX_HEADER: \usepackage[frenchb]{babel}
 #+LATEX_HEADER_EXTRA:
 #+LANGUAGE: fr
-#+TITLE: TP1 : Graphes et Behaviour Trees
+#+TITLE: TP2 : Tkinter
 #+AUTHOR: Valentin LEBOUVIER
 
 
 * Présentation Tkinter
 Tkinter est un outil de représentation graphique facile a prendre en main et disponible dans la librairie standard Python.
-Application (Tk)
-Widgets(Button,Canvas)
+
+Présentation Application (Tk)
+
+Présentation Widgets(Button,Canvas)
 
 
 * Ma première fenêtre
 Pour créer votre première fenêtre, il vous suffit d'importer tkinter avec la commande:
-
 #+BEGIN_SRC python
 import tkinter as tk
 #+END_SRC
 
-Il vous suffit alors de créer une nouvelle application en créant un objet de type ~tk.Tk~ et de le lancer avec la méthode ~.mainloop()~. /!\ Prenez bien note de lancer la ~.mainloop~ en dernier, car il est blockant.
+Il vous suffit alors de créer une nouvelle application en créant un objet de type ~tk.Tk~ et de le lancer avec la méthode ~.mainloop()~.
 
 #+LATEX: \noindent
-Vous pouvez ensuite commencer a modifier les paramètres de la fenêtre:
+/!\ Prenez bien note de lancer la ~.mainloop~ en dernier, car il est bloquant.
+
+
+#+LATEX: \noindent
+Vous pouvez ensuite commencer a modifier les paramètres de la fenêtre
 - ~.title(str)~ : Change le titre de la fenêtre
 - ~.geometry(str)~ : Change la taille de la fenêtre et son emplacement sur l'écran
+#+LATEX: \noindent
+Pour tout renseignements supplémentaires vous pouvez utiliser ~help()~ dans la console.
+
+* Les Boutons
+Les boutons .... (Création d'un bouton, link vers une fonction/action)
+
+* Les canvas
+Les canvas servent principalement a contenir des dessins. Chaque élément du Canvas pourra ensuite être déplacé dans le Canvas.
+
+Pour dessiner dans le canvas vous pouvez utiliser les commandes suivantes:
+- ~create_arc()~
+- ~create_line()~ 
+- ~create_oval()~ 
+- ~create_rectangle()~ 
+- ~create_polygon()~ 
+
+La plupart de ces fonction demandent la zone dans laquelle la forme doit être dessinée. Les informations demandées sont les point en haut a gauche (~x0~, ~y0~) et le point en bas à droite (~x1~, ~y1~).
+
+#+LATEX: \noindent
+/!\ Le point en haut à gauche de la fenêtre est le (0,0)
+
+
+#+LATEX_ATTR: :caption \caption{Image avec coordonées}
+[[./img/coord_canvas.png]]
+
+(Mise en place d'un apercu de jeu de dame avec qqes instructions)
 
 

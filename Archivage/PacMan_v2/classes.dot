@@ -1,0 +1,19 @@
+digraph "classes" {
+charset="utf-8"
+rankdir=BT
+"0" [label="{BehaviourTree|count : int\linterrupt_tick_tocking : bool\lpost_tick_handlers : list\lpre_tick_handlers : list\lroot\ltree_update_handler : NoneType\lvisitors : list\l|add_post_tick_handler()\ladd_pre_tick_handler()\ladd_visitor()\linsert_subtree()\linterrupt()\lprune_subtree()\lreplace_subtree()\lsetup()\lshutdown()\ltick()\ltick_tock()\ltip()\l}", shape="record"];
+"4" [label="{Maze|Directions : dict\lEmpty : int\lHEIGHT : int\lPill : int\lReverseDirections : dict\lWIDTH : int\lWall : int\lgraph : Graph\lheight : NoneType, int\lmaze : list\lnbOfPills\lwidth : int, NoneType\l|canSee()\lclosestAmong()\lclosestPill()\lcreateGraph()\ldirection()\ldistance()\lgetTextMatrix()\lhasNoPill()\lhasPill()\linit_maze()\lisNextTo()\lisWall()\ltakePill()\l}", shape="record"];
+"6" [label="{PacManController|bt\lengine\lsnapshot_visitor\lspeed : float\lview\l|start()\lstop()\l}", shape="record"];
+"7" [label="{PacManEngine|GhostList : dict\lPacmanList : dict\lgameSpeed\lmaze\lstop_thread : bool\lview\l|hasGhost()\lhasLost()\lhasPacMan()\lhasWon()\lnoMorePills()\lrun()\lsetView()\lstop()\lupdateSeen()\l}", shape="record"];
+"8" [label="{PacManView|CELL_SIZE : int\lbackgroundCanvas\lcontroller\lengine\lghosts : dict\lmainFrame\lpacmans : dict\lpills : dict\lroot\l|close()\lrun()\lstop()\lupdate()\l}", shape="record"];
+"11" [label="{Thread|daemon\ldaemon\lident\lname\lname\l|getName()\lisAlive()\lisDaemon()\lis_alive()\ljoin()\lrun()\lsetDaemon()\lsetName()\lstart()\l}", shape="record"];
+"7" -> "11" [arrowhead="empty", arrowtail="none"];
+"8" -> "11" [arrowhead="empty", arrowtail="none"];
+"0" -> "6" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="bt", style="solid"];
+"4" -> "7" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="maze", style="solid"];
+"7" -> "6" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="engine", style="solid"];
+"8" -> "6" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="view", style="solid"];
+"8" -> "7" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="view", style="solid"];
+"7" -> "8" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="engine", style="solid"];
+
+}

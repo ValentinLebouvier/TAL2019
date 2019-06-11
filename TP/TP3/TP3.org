@@ -1,0 +1,19 @@
+#+OPTIONS: texht:t toc:nil
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS:
+#+LATEX_HEADER: \usepackage[frenchb]{babel}
+#+LATEX_HEADER_EXTRA:
+#+LANGUAGE: fr
+#+TITLE: TP3 : MVC
+#+AUTHOR: Valentin LEBOUVIER
+
+* MVC
+(Explication du MVC)
+
+* Un PacMan revisité
+Lors de ce TP vous aurez à réaliser une vue associée à cet ensemble modèle/controlleur:
+
+(diagramme de classe modèle/controlleur)
+
+
+
