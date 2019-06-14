@@ -1,0 +1,20 @@
+digraph pastafarianism {
+graph [fontname="times-roman"];
+node [fontname="times-roman"];
+edge [fontname="times-roman"];
+Inverter [fillcolor=ghostwhite, fontcolor=black, fontsize=9, label=Inverter, shape=ellipse, style=filled];
+Condition [fillcolor=ghostwhite, fontcolor=black, fontsize=9, label=Condition, shape=ellipse, style=filled];
+Inverter -> Condition;
+"?" [fillcolor=cyan, fontcolor=black, fontsize=9, label="?", shape=octagon, style=filled];
+Condition -> "?";
+"→" [fillcolor=orange, fontcolor=black, fontsize=9, label="→", shape=box, style=filled];
+"?" -> "→";
+"Not Alone" [fillcolor=gray, fontcolor=black, fontsize=9, label="Not Alone", shape=ellipse, style=filled];
+"→" -> "Not Alone";
+"Goto Pacman" [fillcolor=gray, fontcolor=black, fontsize=9, label="Goto Pacman", shape=ellipse, style=filled];
+"→" -> "Goto Pacman";
+"Condition*" [fillcolor=ghostwhite, fontcolor=black, fontsize=9, label="Condition*", shape=ellipse, style=filled];
+"?" -> "Condition*";
+"Stop Ghost" [fillcolor=gray, fontcolor=black, fontsize=9, label="Stop Ghost", shape=ellipse, style=filled];
+"Condition*" -> "Stop Ghost";
+}

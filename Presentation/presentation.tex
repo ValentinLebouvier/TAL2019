@@ -1,4 +1,4 @@
-% Created 2019-06-07 ven. 15:37
+% Created 2019-06-14 ven. 08:04
 \documentclass[presentation]{beamer}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -18,15 +18,14 @@
 \tolerance=1000
 \usepackage[frenchb]{babel}
 \setbeamertemplate{footline}{\leavevmode\hbox{\begin{beamercolorbox}[wd=.25\paperwidth,ht=2.25ex,dp=1ex,center]   {author in head/foot}\usebeamerfont{author in head/foot}\insertshortauthor\end{beamercolorbox}\begin{beamercolorbox}[wd=.50\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}\usebeamerfont{title in head/foot}\insertshorttitle\end{beamercolorbox}\begin{beamercolorbox}[wd=.25\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}\insertframenumber{} / \inserttotalframenumber\hspace*{2ex}\end{beamercolorbox}}\vskip0pt}
-\AtBeginSection[]{\begin{frame}\vfill\centering\begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}\usebeamerfont{title}\insertsectionhead\par\end{beamercolorbox}\vfill\end{frame}}
 \usetheme{Singapore}
 \usecolortheme{}
 \usefonttheme{}
 \useinnertheme{}
 \useoutertheme{}
-\author{Valentin Lebouvier}
+\author{Valentin LEBOUVIER}
 \date{\today}
-\title{TAL: Behaviour trees}
+\title{TAL: Behaviour Trees}
 \hypersetup{
   pdfkeywords={},
   pdfsubject={},
@@ -40,6 +39,8 @@
 \label{sec-1}
 \begin{frame}[label=sec-1-0-1]{Sujet}
 \alert{Projet IA en Python (part1): Behaviour tree et mission planning}
+
+Encadrant: Catherine DEZAN
 \end{frame}
 
 \begin{frame}[label=sec-1-0-2]{Objectifs}
@@ -61,12 +62,10 @@
 \begin{columns}
 \begin{column}{0.5\textwidth}
 
-\begin{itemize}
-\item Outil de représentation de comportements permettant une modélisation et une implémentation simple ce ces comportements
-\item Utilisé dans les domaines des jeux vidéos et de la robotique pour controller les comportements d'agents autonomes
-\end{itemize}
-\end{column}
+"a way to structure the switching between different tasks in an autonomous agent, such as a robot or a virtual entity in a computer game"
 
+(M. Colledanchise et P. Ögren, \emph{Behavior Trees in Robotics and AI}, 2018)
+\end{column}
 \begin{column}{0.5\textwidth}
 \includegraphics[width=.9\linewidth]{./img/BT_search_and_grasp.png}
 \end{column}
@@ -74,108 +73,294 @@
 \end{frame}
 
 
-
-
-
 \begin{frame}[label=sec-2-0-2]{Définition}
-Un \alert{behaviour tree} (BT) est un graphe orienté acyclique dont chaque noeud retourne Succès (S), Échec (E) ou En Cours (R) selon les règles qui leurs sont associées.
-
-L'évaluation d'un BT se fait par l'action d'un \emph{tick} sur son noeud racine, celui-ci évalue alors ses enfants de gauche a droite selon les règles qui sont associées a son type.
+\alert{Behaviour tree} (BT):
+\begin{itemize}
+\item Graphe orienté acyclique
+\item Chaque noeud retourne Succès, Échec ou En Cours selon leurs règles associées
+\item Évalué par un \emph{tick} qui se propage en profondeur dans le graphe
+\end{itemize}
 
 Les noeuds peuvent se trouver sous trois formes, les Composites, les Décorateurs et les noeuds d'Éxécution.
 \end{frame}
 
 
+\begin{frame}[label=sec-2-0-3]{Modularité}
+\begin{columns}
+\begin{column}{0.5\textwidth}
 
-\subsection{Décorateurs}
+\begin{itemize}
+\item Modulaire: Un BT peu remplacer une feuille
+\end{itemize}
+
+
+\includegraphics[width=.9\linewidth]{./img/Robot.png}
+\end{column}
+
+
+
+\begin{column}{0.5\textwidth}
+
+\begin{itemize}
+\item Condition: Le BT ne retourne Succès ou Échec
+\end{itemize}
+
+
+\includegraphics[width=.9\linewidth]{./img/Robot2.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}[label=sec-2-0-4]{Recherches \& Mission planning}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+
+\begin{center}
+Robotique
+\end{center}
+
+\includegraphics[width=.9\linewidth]{./img/Drone.png}
+\end{column}
+
+\begin{column}{0.5\textwidth}
+
+\begin{center}
+Jeu vidéo
+\end{center}
+
+\includegraphics[width=.9\linewidth]{./img/Unity.jpg}
+\end{column}
+\end{columns}
+\end{frame}
+\subsection{}
 \label{sec-2-1}
-\begin{frame}[label=sec-2-1-1]{Décorateurs}
-\end{frame}
 
-\subsection{Noeuds d'éxécution}
-\label{sec-2-2}
-\begin{frame}[label=sec-2-2-1]{\alert{Action}}
-Représentation :
+\begin{frame}[label=sec-2-1-1]{Noeuds d'éxécution}
+\begin{columns}
+\begin{column}{0.5\textwidth}
 
-Retourne Succès si:
-L'action s'est terminée correctement
+\begin{center}
+\alert{Action}
+\end{center}
 
-Retourne Échec si:
-L'action s'est mal terminée
-
-Retourne En Cours si:
-L'action est en cours
-\end{frame}
+\includegraphics[width=.9\linewidth]{img/Action.png}
 
 
-\begin{frame}[label=sec-2-2-2]{\alert{Condition}}
-Représentation :
+Succès si:
+Action terminée correctement
 
-Retourne Succès si:
-La condition est vraie
+Échec si:
+Action mal terminée
 
-Retourne Échec si:
-La condition est fausse
+En Cours si:
+Action non terminée
+\end{column}
 
-Retourne En Cours si:
+
+\begin{column}{0.5\textwidth}
+
+\begin{center}
+\alert{Condition}
+\end{center}
+
+\includegraphics[width=.9\linewidth]{img/Condition.png}
+
+
+Succès si:
+Condition vraie
+
+Échec si:
+Condition fausse
+
+En Cours si:
 Jamais
+\end{column}
+\end{columns}
 \end{frame}
 
-\subsection{Composites}
-\label{sec-2-3}
 
-\begin{frame}[label=sec-2-3-1]{\alert{Séquence}}
-Représentation :
+\begin{frame}[label=sec-2-1-2]{Composites}
+\begin{columns}
+\begin{column}{0.5\textwidth}
 
-Retourne Succès si:
+\begin{center}
+\alert{Séquence}
+\end{center}
+
+\includegraphics[width=.9\linewidth]{img/Sequence.png}
+
+
+Succès si:
 Tout les enfants ont réussis
 
-Retourne Échec si:
+Échec si:
 Un enfant a échoué
 
-Retourne En Cours si:
+En Cours si:
 Un enfant est en cours
-\end{frame}
+\end{column}
 
-\begin{frame}[label=sec-2-3-2]{\alert{Sélecteur}}
-Représentation :
+\begin{column}{0.5\textwidth}
 
-Retourne Succès si:
+\begin{center}
+\alert{Sélecteur}
+\end{center}
+
+\includegraphics[width=.9\linewidth]{img/Selector.png}
+
+
+Succès si:
 Un enfant a réussi
 
-Retourne Échec si:
+Échec si:
 Tout les enfants ont échoués
 
-Retourne En Cours si:
+En Cours si:
 Un enfant est en cours
+\end{column}
+\end{columns}
 \end{frame}
 
-\begin{frame}[label=sec-2-3-3]{\alert{Parallèle}}
-Représentation :
+\begin{frame}[label=sec-2-1-3]{Composites}
+\begin{columns}
+\begin{column}{0.5\textwidth}
 
-Retourne Succès si:
+\begin{center}
+\alert{Parallèle}
+\end{center}
+
+\includegraphics[width=.9\linewidth]{img/Parallel.png}
+
+
+Succès si:
 M enfants ont réussis
 
-Retourne Échec si:
+Échec si:
 F enfants ont échoués
 
-Retourne En Cours si:
+En Cours si:
 Aucun des précédents
+\end{column}
+
+\begin{column}{0.5\textwidth}
+
+\begin{center}
+\alert{Composites avec Mémoire}
+\end{center}
+
+\includegraphics[width=.9\linewidth]{img/Memories.png}
+
+Identique à leurs équivalents sans mémoire.
+
+Mais tant que ce noeud est En Cours, les enfants ayant déjà échoués ou réussis ne sont par re-tickés
+\end{column}
+\end{columns}
 \end{frame}
 
-\begin{frame}[label=sec-2-3-4]{Composites avec mémoires}
+
+\begin{frame}[label=sec-2-1-4]{Décorateurs}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+
+\begin{center}
+\alert{Décorateur}
+\end{center}
+
+\includegraphics[width=.9\linewidth]{img/Decorateur.png}
+
+
+Succès, Échec ou En Cours si: 
+Personnalisé
+\end{column}
+
+\begin{column}{0.5\textwidth}
+Exemples:
+\begin{itemize}
+\item Inverseur
+\item Comteur
+\item Condition
+\end{itemize}
+\end{column}
+\end{columns}
 \end{frame}
 
 
-\section{PacMan}
+\section{BTs \& PacMan}
 \label{sec-3}
-\begin{frame}[label=sec-3-0-1]{Frame 1}
+\begin{frame}[label=sec-3-0-1]{PacMan}
+Objectif: Manger tout les PacGums sans se faire manger par les fantômes
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+
+\includegraphics[width=.9\linewidth]{img/EatPills.png}
+\end{column}
+
+\begin{column}{0.5\textwidth}
+
+\includegraphics[width=.9\linewidth]{img/EatPills2.png}
+\end{column}
+\end{columns}
 \end{frame}
+
+\begin{frame}[label=sec-3-0-2]{Mouvement déterministe}
+\includegraphics[width=.9\linewidth]{../Archivage/PacMan_v0/PacManDeterministeBT.png}
+\end{frame}
+
+\begin{frame}[label=sec-3-0-3]{Mouvement aléatoire}
+\includegraphics[width=.9\linewidth]{../Archivage/PacMan_v0/PacManRandomBT.png}
+\end{frame}
+
+\begin{frame}[label=sec-3-0-4]{Mouvement équiprobable}
+\includegraphics[width=.9\linewidth]{../Archivage/PacMan_v0/SimplifiedEquiprobable.png}
+\end{frame}
+
+\begin{frame}[label=sec-3-0-5]{Mouvement équiprobable}
+\includegraphics[width=.9\linewidth]{../Archivage/PacMan_v0/PacManEquiprobableBT.png}
+\end{frame}
+
+\begin{frame}[label=sec-3-0-6]{Modèle continu}
+\begin{center}
+\includegraphics[height=0.68\textwidth]{../WIP/PacMan/classes.png}
+\end{center}
+\end{frame}
+
+\begin{frame}[label=sec-3-0-7]{Controlleur actuel}
+\includegraphics[width=.9\linewidth]{./img/LastPacMan.png}
+\end{frame}
+
+\begin{frame}[label=sec-3-0-8]{Rendu}
+\begin{center}
+\includegraphics[height=0.68\textwidth]{./img/PacMan.png}
+\end{center}
+\end{frame}
+
+
+
 
 
 \section{TPs}
 \label{sec-4}
-\begin{frame}[label=sec-4-0-1]{Frame 1}
+\begin{frame}[label=sec-4-0-1]{TPs}
+TP python/POO sur le thème des BTs 
+
+Organisation en 3 TPs:
+\begin{itemize}
+\item Graphes \& BTs
+\item Tkinter
+\item Tkinter appliqué au PacMan (MVC)
+\end{itemize}
+\end{frame}
+
+\section{Conclusion}
+\label{sec-5}
+\begin{frame}[label=sec-5-0-1]{Conclusion}
+\begin{itemize}
+\item Modulaire
+\item Réactif
+\item Intuitif
+\end{itemize}
 \end{frame}
 % Emacs 25.2.2 (Org mode 8.2.10)
 \end{document}

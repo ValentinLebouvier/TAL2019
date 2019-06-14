@@ -1,5 +1,4 @@
 digraph grabNgoal {
-	Ø [shape=box];
 	Seq1 [shape=box, label="→"];
 	Fall1 [shape=box, label="?"];
 	Fall2 [shape=box, label="?"];
@@ -16,7 +15,6 @@ digraph grabNgoal {
 	Goto_Goal [shape=box, label="Goto Goal"];
 	Place_Goal [shape=box, label="Place on Goal"];
 	
-	Ø -> Seq1;
 	Seq1 -> { Fall1; Fall2; Fall3; Place_Goal};
 	Fall1 -> { Near_Block; Goto_Block };
 	Fall2 -> { Hold_Block; Deco_Square; Deco_Round };

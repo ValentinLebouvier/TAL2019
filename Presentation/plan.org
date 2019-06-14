@@ -1,0 +1,26 @@
+* Introduciton (1min)
+- Sujet (1f)
+- Problématiques (1f) {Contexte}
+- Plan (1f)
+
+* BTs (5.5min)
+- IA pour agents autonomes (Robotique, Jeu Vidéo) (1f) (1min)
+- BTs dans la recherche & BTs pour Mission Planning (1f) (2min)
+- Comment ca marche ? (~6f) (2.5min)
+Exemple simple
+
+* Python & BTs pour éducation (3min)
+- Présentation du contexte (1f)
+- Pour comprendre BT? Graphes & parcours (1f)
+- Pour utiliser BT? Tkinter pour interface (1f)
+- Pour travailler avec BT? Création interface pour PacMan && (si il y a le temps, travail sur le BT) (1f) 
+
+* PacMan (5min)
+- Comment il fonctionne? (2f) {UML, ...}
+- Comment on en est arrivé là? (1f) {Versions, pbs threads ...}
+- ???Démonstration???
+
+* Conclusion (0.5min)
+
+-developper exemple BT pacman
+-puis TPs

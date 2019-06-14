@@ -5,13 +5,16 @@ Created on Tue May 28 13:49:52 2019
 @author: valentinlebouvier
 """
 import py_trees
+import time
 import threading
 import toolkit as tool
+from PacManModel import PacManModel
+from PacManView import PacManView
 
 
 class PacManController(threading.Thread):
     
-    def __init__(self,model,speed=None):
+    def __init__(self,model,nbPacmans=1,nbGhosts=1,speed=0.5):
         threading.Thread.__init__(self)
         blackboard = py_trees.blackboard.Blackboard()
         blackboard.times = {}
@@ -20,18 +23,15 @@ class PacManController(threading.Thread):
         
         self.model = model
         self.subscribers = [model]
-        if speed is None:
-            self.speed = self.model.gameSpeed * 1000
-        else :
-            self.speed = speed*1000
+        self.speed = speed
         
         self.bt, parallel = tool.createGameBTHeader(self.model)
         
-        for idP in range(self.model.nbPacmans):
+        for idP in range(nbPacmans):
             btPacman = tool.createPillSeeking(self.model,"Pacman"+str(idP))
             bt = tool.addNoSuccessOverflow(btPacman)
             parallel.add_child(bt)
-        for idG in range(self.model.nbGhosts):
+        for idG in range(nbGhosts):
             btGhost = tool.createPacmanChase(self.model,"Ghost"+str(idG))
             bt = tool.addNoSuccessOverflow(btGhost)
             parallel.add_child(bt)
@@ -47,13 +47,14 @@ class PacManController(threading.Thread):
     def run(self):
         try:
             self.bt.tick_tock(
-                self.speed,
+                self.speed*1000,
                 py_trees.trees.CONTINUOUS_TICK_TOCK,
                 None,
                 None #lambda x: print(py_trees.display.ascii_tree(self.bt.root,self.snapshot_visitor))
             )
         except KeyboardInterrupt:
-            self.stop()
+            print("KeyboardInterrupt")
+        self.stop()
 
     
     def stop(self):
@@ -62,4 +63,4 @@ class PacManController(threading.Thread):
             s.stop()
     
     def subscribe(self, subs):
-        self.subscribers.append(subs)
+        self.subscribers.append()

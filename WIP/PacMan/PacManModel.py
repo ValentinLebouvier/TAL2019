@@ -14,8 +14,12 @@ from Characters import PacMan,Ghost
 
 class PacManModel(threading.Thread):
     
-    def __init__(self,nbPacmans,nbGhosts,speed):
+    def __init__(self,nbPacmans=1,nbGhosts=1,speed=0.5):
         threading.Thread.__init__(self)
+        self.nbPacmans = nbPacmans
+        self.nbGhosts = nbGhosts
+        self.gameSpeed = speed
+        
         self.maze = Maze()
         self.PacmanList = {}
         self.GhostList = {}
@@ -24,7 +28,6 @@ class PacManModel(threading.Thread):
             self.PacmanList["Pacman"+str(idP)] = PacMan(1.5,1.5,1,self.maze,"Pacman"+str(idP))
         for idG in range(nbGhosts):
             self.GhostList["Ghost"+str(idG)] = Ghost(11.5,9.5,0.9,self.maze,"Ghost"+str(idG))
-        self.gameSpeed = speed
         self.stop_thread = False
         self.updateSeen()
         
@@ -75,8 +78,10 @@ class PacManModel(threading.Thread):
                 g.move()
             if self.hasLost():
                 break
+            
             if (self.stop_thread):
                 break
+            
             for v in self.subscribers:
                 v.update()
             time.sleep(self.gameSpeed)
