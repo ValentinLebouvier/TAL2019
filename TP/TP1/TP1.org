@@ -1,25 +1,37 @@
-#+OPTIONS: texht:t
+#+OPTIONS: texht:t toc:nil
 #+LATEX_CLASS: article
 #+LATEX_CLASS_OPTIONS:
-#+LATEX_HEADER:
+#+LATEX_HEADER: \usepackage[frenchb]{babel}
 #+LATEX_HEADER_EXTRA:
+#+LANGUAGE: fr
 #+TITLE: TP1 : Graphes et Behaviour Trees
-#+AUTHOR: Valentin LEBOUVIER
+#+AUTHOR:
+
+* Objectif des TPs
+Ce TP est le premier d'une série de trois TPs dont le but final est de créer une interface pour un jeu de PacMan.
+Dans ce TP, vous verrez un outils qui s'apelle les Behaviour Trees.
+C'est un outil qui sert dans les domaines du jeu-vidéo et de la robotique pour contrôler les agents autonomes (i.e. NPC, robot,...).
+Dans le second TP, vous apprendrez à créer une interface tkinter.
+Et dans le dernier TP, vous mettrez en place une interface pour un PacMan.
+Et si vous êtes rapides, vous pourrez même créer des Behaviour trees pour contrôler le PacMan comme vous le voulez.
 
 * Rappels sur les graphes:
+Les graphes sont des structures de données 
+
 Rappels sur les graphes: (non-)orientés, (a)cycliques
 
 Parcours largeur, hauteur ...
 
 
 * Graphes simples:
-Noeuds (init(name), addChild, addChildren, parcoursLargeur, parcourProfondeur)
+Noeuds (init(name), addChild, addChildren,  parcourProfondeur)
 
-Avec affichage du nom du noeud
+Avec affichage du nom du noeud lors de la visite en profondeur
 
 * Behaviour trees:
 Présentation BT orienté IA/ jeux vidéo
+
 Présentation des différents types de noeuds & fonctionnement global
 
-Construction example simple avec py_trees
+Construction exemple simple avec py-trees
 

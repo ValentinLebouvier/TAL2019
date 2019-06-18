@@ -1,4 +1,4 @@
-% Created 2019-06-11 mar. 10:31
+% Created 2019-06-18 mar. 11:47
 \documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -16,7 +16,7 @@
 \usepackage{amssymb}
 \usepackage{hyperref}
 \tolerance=1000
-\author{Valentin LEBOUVIER}
+\usepackage[frenchb]{babel}
 \date{\today}
 \title{TP1 : Graphes et Behaviour Trees}
 \hypersetup{
@@ -26,27 +26,37 @@
 \begin{document}
 
 \maketitle
-\tableofcontents
 
+\section{Objectif des TPs}
+\label{sec-1}
+Ce TP est le premier d'une série de trois TPs dont le but final est de créer une interface pour un jeu de PacMan.
+Dans ce TP, vous verrez un outils qui s'apelle les Behaviour Trees.
+C'est un outil qui sert dans les domaines du jeu-vidéo et de la robotique pour contrôler les agents autonomes (i.e. NPC, robot,\ldots{}).
+Dans le second TP, vous apprendrez à créer une interface tkinter.
+Et dans le dernier TP, vous mettrez en place une interface pour un PacMan.
+Et si vous êtes rapides, vous pourrez même créer des Behaviour trees pour contrôler le PacMan comme vous le voulez.
 
 \section{Rappels sur les graphes:}
-\label{sec-1}
+\label{sec-2}
+Les graphes sont des structures de données
+
 Rappels sur les graphes: (non-)orientés, (a)cycliques
 
 Parcours largeur, hauteur \ldots{}
 
 
 \section{Graphes simples:}
-\label{sec-2}
-Noeuds (init(name), addChild, addChildren, parcoursLargeur, parcourProfondeur)
+\label{sec-3}
+Noeuds (init(name), addChild, addChildren,  parcourProfondeur)
 
-Avec affichage du nom du noeud
+Avec affichage du nom du noeud lors de la visite en profondeur
 
 \section{Behaviour trees:}
-\label{sec-3}
+\label{sec-4}
 Présentation BT orienté IA/ jeux vidéo
+
 Présentation des différents types de noeuds \& fonctionnement global
 
-Construction example simple avec py$_{\text{trees}}$
+Construction exemple simple avec py-trees
 % Emacs 25.2.2 (Org mode 8.2.10)
 \end{document}

@@ -9,7 +9,7 @@
 
 
 * Présentation Tkinter
-Tkinter est un outil de représentation graphique facile a prendre en main et disponible dans la librairie standard Python.
+Tkinter est un outil de représentation graphique facile à prendre en main et disponible dans la librairie standard Python.
 
 Présentation Application (Tk)
 
@@ -33,13 +33,10 @@ Vous pouvez ensuite commencer a modifier les paramètres de la fenêtre
 - ~.title(str)~ : Change le titre de la fenêtre
 - ~.geometry(str)~ : Change la taille de la fenêtre et son emplacement sur l'écran
 #+LATEX: \noindent
-Pour tout renseignements supplémentaires vous pouvez utiliser ~help()~ dans la console.
-
-* Les Boutons
-Les boutons .... (Création d'un bouton, link vers une fonction/action)
+Pour tout renseignement supplémentaire, vous pouvez utiliser ~help()~ dans la console.
 
 * Les canvas
-Les canvas servent principalement a contenir des dessins. Chaque élément du Canvas pourra ensuite être déplacé dans le Canvas.
+Les canvas servent principalement à contenir des dessins. Chaque élément du Canvas pourra ensuite être déplacé dans le Canvas.
 
 Pour dessiner dans le canvas vous pouvez utiliser les commandes suivantes:
 - ~create_arc()~

@@ -1,0 +1,7 @@
+digraph "classes" {
+charset="utf-8"
+rankdir=BT
+"0" [label="{PacManController|bt\lmodel\lsnapshot_visitor : SnapshotVisitor\lspeed\lsubscribers : list\l|run()\lstop()\lsubscribe()\l}", shape="record"];
+"1" [label="{Thread|daemon\ldaemon\lident\lis_alive\lname\lname\l|getName()\lisAlive()\lisDaemon()\ljoin()\lrun()\lsetDaemon()\lsetName()\lstart()\l}", shape="record"];
+"0" -> "1" [arrowhead="empty", arrowtail="none"];
+}

@@ -1,0 +1,7 @@
+digraph "classes" {
+charset="utf-8"
+rankdir=BT
+"0" [label="{PacManView|CELL_SIZE : int\lbackgroundCanvas : Canvas\lcontroller\lghosts : dict\lisToStop : bool\lmainFrame : Frame\lmodel\lpacmans : dict\lpills : dict\l|close()\lstart()\lstop()\lupdate()\lupdatePacman()\lupdateStop()\l}", shape="record"];
+"1" [label="{Tk|children : dict\lmaster : NoneType\ltest : Button\ltk : NoneType\l|destroy()\lloadtk()\lreadprofile()\lreport_callback_exception()\l}", shape="record"];
+"0" -> "1" [arrowhead="empty", arrowtail="none"];
+}

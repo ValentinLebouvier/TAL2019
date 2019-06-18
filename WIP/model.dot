@@ -1,0 +1,14 @@
+digraph "classes" {
+charset="utf-8"
+rankdir=BT
+"0" [label="{Maze|Directions : dict\lEmpty : int\lHEIGHT : int\lPill : int\lReverseDirections : dict\lWIDTH : int\lWall : int\lgraph\lheight : int, NoneType\lmaze : list\lnbOfPills\lwidth : int, NoneType\l|canSee()\lclosestAmong()\lclosestPill()\lcreateGraph()\ldirection()\ldistance()\lgetTextMatrix()\lhasNoPill()\lhasPill()\linit_maze()\lisNextTo()\lisWall()\ltakePill()\l}", shape="record"];
+"1" [label="{PacManModel|GhostList : dict\lPacmanList : dict\lgameSpeed : float\lmaze\lnbGhosts : int\lnbPacmans : int\lstop_thread : bool\lsubscribers : list\l|hasGhost()\lhasLost()\lhasPacMan()\lhasWon()\lnoMorePills()\lrun()\lstop()\lsubscribe()\lupdateSeen()\l}", shape="record"];
+"2" [label="{Thread|daemon\ldaemon\lident\lis_alive\lname\lname\l|getName()\lisAlive()\lisDaemon()\ljoin()\lrun()\lsetDaemon()\lsetName()\lstart()\l}", shape="record"];
+"3" [label="{_Condition|acquire\lnotify_all\lrelease\l|notify()\lnotifyAll()\lwait()\l}", shape="record"];
+"4" [label="{_Event|is_set\l|clear()\lisSet()\lset()\lwait()\l}", shape="record"];
+"1" -> "2" [arrowhead="empty", arrowtail="none"];
+"0" -> "1" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="maze", style="solid"];
+"3" -> "2" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="__block", style="solid"];
+"3" -> "4" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="__cond", style="solid"];
+"4" -> "2" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="__started", style="solid"];
+}
