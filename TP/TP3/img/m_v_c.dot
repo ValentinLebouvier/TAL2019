@@ -1,0 +1,15 @@
+digraph "m_v_c" {
+"0" [label="{Maze|Directions : dict\lEmpty : int\lHEIGHT : int\lPill : int\lReverseDirections : dict\lWIDTH : int\lWall : int\lgraph\lheight : int, NoneType\lmaze : list\lnbOfPills\lwidth : int, NoneType\l|canSee()\lclosestAmong()\lclosestPill()\lcreateGraph()\ldirection()\ldistance()\lgetTextMatrix()\lhasNoPill()\lhasPill()\linit_maze()\lisNextTo()\lisWall()\ltakePill()\l}", shape="record"];
+"1" [label="{PacManModel|GhostList : dict\lPacmanList : dict\lgameSpeed : float\lmaze\lnbGhosts : int\lnbPacmans : int\lstop_thread : bool\lsubscribers : list\l|hasGhost()\lhasLost()\lhasPacMan()\lhasWon()\lnoMorePills()\lrun()\lstop()\lsubscribe()\lupdateSeen()\l}", shape="record"];
+"3" [label="{PacManController|bt\lmodel\lsnapshot_visitor : SnapshotVisitor\lspeed\lsubscribers : list\l|run()\lstop()\lsubscribe()\l}", shape="record"];
+
+"4" [label="{PacManView|CELL_SIZE : int\lbackgroundCanvas : Canvas\lcontroller\lghosts : dict\lisToStop : bool\lmainFrame : Frame\lmodel\lpacmans : dict\lpills : dict\l|close()\lstart()\lstop()\lupdate()\lupdatePacman()\l}", shape="record"];
+
+
+
+
+"0" -> "1" [arrowhead="diamond", arrowtail="none", fontcolor="green", label="maze", style="solid"];
+"1" -> "4" [arrowhead="", arrowtail="none", fontcolor="green", taillabel="subscribers", style="solid"];
+"3" -> "4" [arrowhead="", arrowtail="none", fontcolor="green", taillabel="subscribers", style="solid"];
+
+}

@@ -1,0 +1,93 @@
+#+OPTIONS: texht:t toc:nil
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS:
+#+LATEX_HEADER: \usepackage[frenchb]{babel}
+#+LATEX_HEADER_EXTRA:
+#+LANGUAGE: fr
+#+TITLE: TP2 : Tkinter
+#+AUTHOR:
+
+
+* Présentation Tkinter
+Tkinter est un outil de représentation graphique facile à prendre en main et disponible dans la librairie standard Python.
+
+#+LATEX: \noindent
+L'objet ~Tk~ est celui qui crée la fenêtre principale de l'application.
+
+#+LATEX: \noindent
+Dans la plupart des objets tkinter, on peut ajouter de nombreux /Widgets/, ce sont des objets comme des boutons (~Button~), des étiquettes (~Label~) ou des champs de saisie (~Entry~).
+Une fois ces /Widgets/ créés, il faut le placer dans la fenêtre avec l'opérateur de placement ~.pack()~
+
+#+LATEX: \noindent
+Pour tout renseignement supplémentaire, vous pouvez utiliser ~help()~ dans la console ou aller sur le site http://tkinter.fdex.eu .
+
+* Ma première fenêtre
+Pour créer votre première fenêtre, importez tout d'abord tkinter avec la commande:
+#+BEGIN_SRC python
+import tkinter as tk
+#+END_SRC
+
+Il vous suffit alors de créer une nouvelle application en créant un objet de type ~tk.Tk~ et de le lancer avec la méthode ~.mainloop()~.
+
+#+LATEX: \noindent
+/!\ Prenez bien note de lancer la ~.mainloop~ en dernier car il est bloquant.
+
+
+#+LATEX: \noindent
+Vous pouvez ensuite commencer à modifier les paramètres de la fenêtre:
+- ~.title(str)~ : Change le titre de la fenêtre
+- ~.geometry(str)~ : Change la taille de la fenêtre et son emplacement sur l'écran
+
+#+LATEX: \noindent
+Pour ajouter un bouton, il suffit de créer un objet ~Button~ avec comme premier paramêtre l'objet ~Tk~ pour qu'il lui soit rattaché.
+On peut modifier le texte du bouton avec l'option /text/ à l'initialisation (exemple: ~Button(fenetre,text="Texte")~).
+
+#+LATEX: \noindent
+On donne également la fonction à éxécuter avec l'option /command/ dans l'initialisation. Il faut passer la fonction sans les parenthèses, ce qui limite les fonctions possibles aux fonctions sans paramètres. La fonction à utiliser pour fermer une fenêtre est ~fenetre.destroy()~.
+
+
+#+LATEX: \noindent
+Vous pouvez maintenant créer une fenêtre possédant un bouton pour pouvoir la fermer. Elle devrait ressemble à celle-ci:
+
+#+BEGIN_CENTER
+#+ATTR_LATEX: :width .3\linewidth
+[[./img/premiereFenetre.png]]
+#+END_CENTER
+
+* Les canvas
+Le ~Canvas~ est un /Widget/ servant principalement à contenir des dessins.
+Pour dessiner dans le canvas, vous pouvez utiliser les commandes suivantes:
+- ~create_arc()~: permet de dessiner un arc de cercle 
+- ~create_line()~: permet de dessiner une ligne
+- ~create_oval()~: permet de dessiner un cercle ou un ovale
+- ~create_rectangle()~: permet de dessiner un rectangle
+- ~create_polygon()~: permet de dessiner un polygone
+
+#+LATEX: \noindent
+La plupart de ces fonctions demandent la zone dans laquelle la forme doit être dessinée.
+Les informations demandées sont le point en haut à gauche (~x0~, ~y0~), le point en bas à droite (~x1~, ~y1~), et des options additionnelles pouvant être spécifiques à chaque forme.
+
+#+LATEX: \noindent
+/!\ Notez que le point en haut à gauche de la fenêtre est de coordonnées (0,0).
+
+[[./img/coord_canvas.png]]
+
+#+LATEX: \noindent
+Chaque élément dessiné dans le Canvas pourra ensuite être déplacé ou supprimé du Canvas grâce aux méthodes ~move~ et ~delete~.
+Pour pouvoir utiliser ces méthodes, il vous faudra avoir récupéré l'identifiant de ces éléments qui est donné lorsqu'ils sont créés.
+
+* Le labyrinthe
+
+À partir du tableau donné dans le fichier /labyrinthe.py/, créer une fenêtre tkinter où les -1 sont représentés par des carrés noirs et les 0 par des carrés blancs.
+Notez bien que le tableau est haut de 31 lignes et large de 28 colonnes.
+
+#+LATEX: \noindent
+Pour diminuer le travail à réaliser, vous pouvez entrer l'option /bg/ à l'initialisation du ~Canvas~ pour spécifier la couleur de son fond (couleur à donner en anglais, entre guillemets).
+
+#+LATEX: \noindent
+Votre travail devrait ressembler à ceci:
+
+[[./img/labyrinthe.png]]
+
+
+

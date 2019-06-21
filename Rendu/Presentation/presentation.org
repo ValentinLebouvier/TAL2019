@@ -1,0 +1,376 @@
+#+OPTIONS: H:3 toc:nil num:t
+#+LANGUAGE: fr
+#+BEAMER_COLOR_THEME:
+#+BEAMER_FONT_THEME:
+#+BEAMER_HEADER: \usepackage[frenchb]{babel}
+#+BEAMER_HEADER: \setbeamertemplate{footline}{\leavevmode\hbox{\begin{beamercolorbox}[wd=.25\paperwidth,ht=2.25ex,dp=1ex,center]   {author in head/foot}\usebeamerfont{author in head/foot}\insertshortauthor\end{beamercolorbox}\begin{beamercolorbox}[wd=.50\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}\usebeamerfont{title in head/foot}\insertshorttitle\end{beamercolorbox}\begin{beamercolorbox}[wd=.25\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}\insertframenumber{} / \inserttotalframenumber\hspace*{2ex}\end{beamercolorbox}}\vskip0pt}
+
+#+BEAMER_INNER_THEME: 
+#+BEAMER_OUTER_THEME:
+#+BEAMER_THEME: Singapore
+#+LATEX_CLASS: beamer
+
+#+TITLE: TAL: Behaviour Trees
+#+AUTHOR: Valentin LEBOUVIER
+
+
+* Introduction
+*** Sujet
+*Projet IA en Python (part1): Behaviour tree et mission planning*
+
+Encadrant: Catherine DEZAN
+
+*** Objectifs
+- Sujet 1 : Behaviour trees
+- Sujet 2 : Préparation TPs
+- Sujet 3 (optionnel): Mise en oeuvre sur du mission planning
+  
+*** Plan
+#+LATEX: \tableofcontents
+
+
+* Behaviour Trees
+*** Behaviour Trees
+
+****                                                                  :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
+
+"a way to structure the switching between different tasks in an autonomous agent, such as a robot or a virtual entity in a computer game"
+
+(M. Colledanchise et P. Ögren, /Behavior Trees in Robotics and AI/, 2018)
+****                                                                  :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
+[[./img/BT_search_and_grasp.png]]
+
+
+*** Définition
+*Behaviour tree* (BT):
+- Graphe orienté acyclique
+- Chaque noeud retourne Succès, Échec ou En Cours selon leurs règles associées
+- Évalué par un /tick/ qui se propage en profondeur dans le graphe
+
+Les noeuds peuvent se trouver sous trois formes, les Composites, les Décorateurs et les noeuds d'Éxécution.
+
+
+*** Modularité
+
+****                                                               :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
+
+- Modulaire: Un BT peu remplacer une feuille
+
+
+[[./img/Robot.png]]
+
+ 
+
+****                                                               :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
+
+- Condition: Le BT ne retourne Succès ou Échec 
+  
+
+[[./img/Robot2.png]]
+
+
+*** Recherches & Mission planning
+****                                                               :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
+
+#+BEGIN_CENTER
+Robotique
+#+END_CENTER
+
+[[./img/Drone.png]]
+
+****                                                               :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
+
+#+BEGIN_CENTER
+Jeu vidéo
+#+END_CENTER
+
+[[./img/Unity.jpg]]
+** 
+
+*** Noeuds d'éxécution
+****                                                               :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
+
+#+BEGIN_CENTER
+*Action*
+#+END_CENTER
+
+#+BEGIN_SRC dot :file img/Action.png :cmdline -Kdot -Tpng
+digraph Action {
+Action [shape=box,label="Action"]
+}
+#+END_SRC
+
+
+Succès si:
+Action terminée correctement
+
+Échec si:
+Action mal terminée
+
+En Cours si:
+Action non terminée
+
+
+****                                                               :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
+
+#+BEGIN_CENTER
+*Condition*
+#+END_CENTER
+
+#+BEGIN_SRC dot :file img/Condition.png :cmdline -Kdot -Tpng
+digraph Condition {
+Condition [shape=ellipse,label="Condition"]
+}
+#+END_SRC
+
+
+Succès si:
+Condition vraie
+
+Échec si:
+Condition fausse
+
+En Cours si:
+Jamais
+
+
+***  Composites
+
+****                                                               :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
+
+#+BEGIN_CENTER
+*Séquence*
+#+END_CENTER
+
+#+BEGIN_SRC dot :file img/Sequence.png :cmdline -Kdot -Tpng
+digraph Sequence {
+Sequence [shape=box,label="→"]
+}
+#+END_SRC
+
+
+Succès si:
+Tout les enfants ont réussis
+
+Échec si:
+Un enfant a échoué
+
+En Cours si:
+Un enfant est en cours
+
+****                                                               :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
+
+#+BEGIN_CENTER
+*Sélecteur*
+#+END_CENTER
+
+#+BEGIN_SRC dot :file img/Selector.png :cmdline -Kdot -Tpng
+digraph Selector {
+Selector [shape=box,label="?"]
+}
+#+END_SRC
+
+
+Succès si:
+Un enfant a réussi
+
+Échec si:
+Tout les enfants ont échoués
+
+En Cours si:
+Un enfant est en cours
+
+***  Composites
+****                                                               :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
+
+#+BEGIN_CENTER
+*Parallèle*
+#+END_CENTER
+
+#+BEGIN_SRC dot :file img/Parallel.png :cmdline -Kdot -Tpng
+digraph Parallel {
+Parallel [shape=box,label="⇉"]
+}
+#+END_SRC
+
+
+Succès si:
+M enfants ont réussis
+
+Échec si:
+F enfants ont échoués
+
+En Cours si:
+Aucun des précédents
+
+****                                                               :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
+                                   
+#+BEGIN_CENTER
+*Composites avec Mémoire*
+#+END_CENTER
+
+#+BEGIN_SRC dot :file img/Memories.png :cmdline -Kdot -Tpng
+digraph Memories {
+MSequence [shape=box,label="→*"]
+MSelector [shape=box,label="?*"]
+}
+#+END_SRC
+
+Identique à leurs équivalents sans mémoire.
+
+Mais tant que ce noeud est En Cours, les enfants ayant déjà échoués ou réussis ne sont par re-tickés
+
+
+*** Décorateurs
+****                                                               :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
+
+#+BEGIN_CENTER
+*Décorateur*
+#+END_CENTER
+
+#+BEGIN_SRC dot :file img/Decorateur.png :cmdline -Kdot -Tpng
+digraph Decorateur {
+Decorateur [shape=diamond,label="δ"]
+}
+#+END_SRC
+
+
+Succès, Échec ou En Cours si: 
+Personnalisé
+
+****                                                               :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:      
+Exemples:
+- Inverseur
+- Comteur
+- Condition
+
+
+* BTs & PacMan
+*** PacMan
+Objectif: Manger tout les PacGums sans se faire manger par les fantômes
+
+****                                                               :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
+
+#+BEGIN_SRC dot :file img/EatPills.png :cmdline -Kdot -Tpng
+digraph EatPills {
+EatPills [shape=box,label="EatPills"]
+}
+#+END_SRC
+
+****                                                               :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
+
+#+BEGIN_SRC dot :file img/EatPills2.png :cmdline -Kdot -Tpng
+digraph EatPills2 {
+root [shape=box,label="?"];
+sequence [shape=box,label="→"];
+isAlone [shape=ellipse,label="Pacman seul?"];
+eatPills [shape=box,label="Mange PacGums"];
+flee [shape=box,label="Fuir"];
+
+root->sequence;
+root->flee;
+sequence->isAlone;
+sequence->eatPills;
+}
+#+END_SRC
+
+*** Mouvement déterministe
+
+[[../Archivage/PacMan_v0/PacManDeterministeBT.png]]
+
+*** Mouvement aléatoire
+
+[[../Archivage/PacMan_v0/PacManRandomBT.png]]
+
+*** Mouvement équiprobable
+
+[[../Archivage/PacMan_v0/SimplifiedEquiprobable.png]]
+
+*** Mouvement équiprobable
+
+[[../Archivage/PacMan_v0/PacManEquiprobableBT.png]]
+
+*** Modèle continu
+
+#+BEGIN_CENTER
+#+ATTR_LATEX: :height 0.68\textwidth :center
+[[../WIP/PacMan/classes.png]]
+#+END_CENTER
+
+*** Controlleur actuel
+
+[[./img/LastPacMan.png]]
+
+*** Rendu
+
+#+BEGIN_CENTER
+#+ATTR_LaTeX: :height 0.68\textwidth :center
+[[./img/PacMan.png]]
+#+END_CENTER
+
+
+
+
+
+* TPs
+*** TPs
+TP python/POO sur le thème des BTs 
+
+Organisation en 3 TPs:
+- Graphes & BTs
+- Tkinter
+- Tkinter appliqué au PacMan (MVC)
+
+* Conclusion
+*** Conclusion
+- Modulaire
+- Réactif
+- Intuitif

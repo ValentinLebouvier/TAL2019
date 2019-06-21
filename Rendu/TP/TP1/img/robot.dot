@@ -1,0 +1,16 @@
+digraph "robot" {
+
+"Sequence" [shape=box];
+"AllerCube" [shape=ellipse];
+"PrendreCube" [shape=ellipse];
+"AllerObjectif" [shape=ellipse];
+"DeposerCube" [shape=ellipse];
+"Stop" [shape=ellipse];
+
+"Sequence" -> "AllerCube";
+"Sequence" -> "PrendreCube";
+"Sequence" -> "AllerObjectif";
+"Sequence" -> "DeposerCube";
+"Sequence" -> "Stop";
+
+}
